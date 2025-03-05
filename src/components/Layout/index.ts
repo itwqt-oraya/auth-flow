@@ -1,2 +1,3 @@
 import PublicLayout from './PublicLayout.tsx';
-export {PublicLayout};
+import PrivateLayout from './PrivateLayout.tsx';
+export {PublicLayout, PrivateLayout};

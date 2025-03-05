@@ -1,28 +1,66 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
+import {signup} from '@api/auth';
 
 export default function SignupForm() {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signup(formData);
+  };
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Label htmlFor="firstName">First Name</Label>
-        <Input type="text" placeholder="First Name" />
+        <Input
+          name="firstName"
+          type="text"
+          placeholder="First Name"
+          onChange={handleChange}
+        />
       </FormGroup>
       <FormGroup>
         <Label htmlFor="lastName">Last Name</Label>
-        <Input type="text" placeholder="Last Name" />
+        <Input
+          name="lastName"
+          type="text"
+          placeholder="Last Name"
+          onChange={handleChange}
+        />
       </FormGroup>
       <FormGroup>
         <Label htmlFor="email">Email</Label>
-        <Input type="email" placeholder="Email" />
+        <Input
+          name="email"
+          type="email"
+          placeholder="Email"
+          onChange={handleChange}
+        />
       </FormGroup>
       <FormGroup>
         <Label htmlFor="password">Password</Label>
-        <Input type="password" placeholder="Password" />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
-        <Input type="password" placeholder="Confirm Password" />
+        <Input
+          name="password"
+          type="password"
+          placeholder="Password"
+          onChange={handleChange}
+        />
       </FormGroup>
 
       <Button color="success" type="submit">

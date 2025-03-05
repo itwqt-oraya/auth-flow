@@ -7,7 +7,6 @@ import {AuthContext} from '@context/AuthContext';
 export default function PublicLayout() {
   const {isAuth} = useContext(AuthContext);
   const navigate = useNavigate();
-
   useEffect(() => {
     if (isAuth()) {
       navigate('/dashboard');

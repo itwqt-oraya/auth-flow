@@ -13,6 +13,10 @@ export default defineConfig({
       '@utils': '/src/utils',
       '@context': '/src/context',
       '@modules': '/src/modules',
+      '@api': '/src/api',
     },
+  },
+  server: {
+    port: 3000,
   },
 });
