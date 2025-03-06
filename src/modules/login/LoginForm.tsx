@@ -26,7 +26,7 @@ export default function LoginForm() {
     login(formData).then((res) => {
       loginUser(res.data);
       if (res.status === 200) {
-        nav('/dashboard');
+        window.location.reload();
       }
     });
   };
