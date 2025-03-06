@@ -12,8 +12,8 @@ export const getPost = (id, token) => {
 
 // POST /post create post
 // title , message
-export const createPost = (data) => {
-  return http('POST', '/post', data);
+export const createPost = (data, token) => {
+  return http('POST', '/post', data, token);
 };
 
 // PUT /post/:id update post

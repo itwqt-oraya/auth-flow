@@ -1,27 +1,21 @@
 import React, {useContext, useEffect} from 'react';
-import {Outlet, useNavigate} from 'react-router';
-import {Container} from 'reactstrap';
-import {Nav} from '@components/NavBar';
+import {Outlet, Navigate} from 'react-router';
+import {NavPrivate} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
 
-export default function PublicLayout() {
-  const {isAuth} = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuth()) {
-      navigate('/dashboard');
-    } else {
-      navigate('/');
-    }
-  }, []);
+export default function PrivateLayout() {
+  const {isAuthenticated, refreshAuth} = useContext(AuthContext);
 
   return (
     <>
-      <Nav />
-      <Container>
-        <Outlet />
-      </Container>
+      {isAuthenticated ? (
+        <>
+          <NavPrivate />
+          <Outlet />
+        </>
+      ) : (
+        <Navigate to="/" />
+      )}
     </>
   );
 }

@@ -1,3 +1,3 @@
 import Nav from './Nav.tsx';
-
-export {Nav};
+import NavPrivate from './NavPrivate.tsx';
+export {Nav, NavPrivate};

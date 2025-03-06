@@ -1,21 +1,23 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {getPosts} from '@api/dashboard';
+import {getCookie} from '@utils/cookie';
 import {AuthContext} from '@context/AuthContext';
 import {transformDate} from '@utils/date';
 import {Table, Button} from 'reactstrap';
 import {Link, useLocation} from 'react-router';
 
 export default function GetPosts() {
-  const {user} = useContext(AuthContext);
-  const token = user.token;
+  const {handleStatusCode, reload} = useContext(AuthContext);
+  const token = getCookie('token');
   const location = useLocation();
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     getPosts(token).then((res) => {
+      handleStatusCode(res.status);
       setPosts(res.data.data);
     });
-  }, [token]);
+  }, [token, handleStatusCode, reload]);
 
   return (
     <Table bordered hover responsive>
@@ -33,12 +35,12 @@ export default function GetPosts() {
             <td>{transformDate(post.createdAt)}</td>
             <td>{post.title}</td>
             <td>{post.message}</td>
-            <td className="d-flex gap-2">
+            <td>
               <Link
                 to={`/dashboard/post/edit/${post.postId}`}
                 state={{background: location}}
               >
-                <Button color="primary" size="sm">
+                <Button outline color="primary" size="sm">
                   Edit
                 </Button>
               </Link>
@@ -46,7 +48,7 @@ export default function GetPosts() {
                 to={`/dashboard/post/delete/${post.postId}`}
                 state={{background: location}}
               >
-                <Button color="danger" size="sm">
+                <Button outline color="danger" size="sm">
                   Delete
                 </Button>
               </Link>

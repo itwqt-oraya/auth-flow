@@ -8,6 +8,7 @@ export const http = (
 ) => {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
+    timeout: 5000,
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -21,10 +22,10 @@ export const http = (
     data: data,
   })
     .then((response) => {
-      console.log(response);
       return response;
     })
     .catch((error) => {
-      console.log('the error', error);
+      console.log(error);
+      throw error;
     });
 };

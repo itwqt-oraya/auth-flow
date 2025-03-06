@@ -37,14 +37,30 @@ function RouteMap() {
   return (
     <>
       <Routes location={background || location}>
-        <Route path="/" element={<PublicLayout />}>
-          <Route index element={<Login />} />
-          <Route path="signup" element={<Signup />} />
+        <Route path="/">
+          <Route
+            index
+            element={
+              <PublicLayout>
+                <Login />
+              </PublicLayout>
+            }
+          />
+          <Route
+            path="signup"
+            element={
+              <PublicLayout>
+                <Signup />
+              </PublicLayout>
+            }
+          />
         </Route>
 
         <Route path="/dashboard" element={<PrivateLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="post" element={<DashboardAddPost />} />
+          <Route path="post/edit/:id" element={<DashboardEditPost />} />
+          <Route path="post/delete/:id" element={<DashboardDeletePost />} />
         </Route>
 
         <Route path="*" element={<p>Not found.</p>} />
@@ -53,20 +69,10 @@ function RouteMap() {
       {background && (
         <Routes>
           <Route path="/dashboard/post" element={<DashboardAddPost />} />
-        </Routes>
-      )}
-
-      {background && (
-        <Routes>
           <Route
             path="/dashboard/post/edit/:id"
             element={<DashboardEditPost />}
           />
-        </Routes>
-      )}
-
-      {background && (
-        <Routes>
           <Route
             path="/dashboard/post/delete/:id"
             element={<DashboardDeletePost />}

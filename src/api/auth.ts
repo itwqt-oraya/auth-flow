@@ -10,6 +10,11 @@ export const signup = (data) => {
   return http('POST', '/user/signup', data);
 };
 
+// GET for refresh token
+export const refresh = (token) => {
+  return http('GET', '/auth/refresh', null, token);
+};
+
 export const test = () => {
   return http('GET', '/test', null, getCookie('token'));
 };

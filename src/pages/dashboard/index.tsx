@@ -1,14 +1,11 @@
 import React from 'react';
-import {CreatePost, GetPosts} from '@components/Dashboard';
-import {Button} from 'reactstrap';
+import {GetPosts} from '@components/Dashboard';
 
 export default function index() {
   return (
-    <div>
-      {/* Input */}
-
-      {/* List */}
+    <main className="container py-3">
+      <h3>Your Posts</h3>
       <GetPosts />
-    </div>
+    </main>
   );
 }

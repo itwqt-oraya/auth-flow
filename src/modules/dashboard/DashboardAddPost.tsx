@@ -14,9 +14,11 @@ import {
 } from 'reactstrap';
 import {createPost} from '@api/dashboard';
 import {useNavigate} from 'react-router';
+import {getCookie} from '@utils/cookie';
 
 export default function DashboardAddPost() {
-  const {user} = useContext(AuthContext);
+  const {handleStatusCode, triggerReload} = useContext(AuthContext);
+  const token = getCookie('token');
   const nav = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -34,8 +36,10 @@ export default function DashboardAddPost() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createPost(formData, user.token).then(() => {
-      nav(0);
+    createPost(formData, token).then((res) => {
+      handleStatusCode(res.status);
+      triggerReload();
+      nav(-1);
     });
   };
 
@@ -58,10 +62,7 @@ export default function DashboardAddPost() {
               value={formData.title}
               onChange={handleChange}
             />
-            <FormText>
-              This is the name that will be displayed on your profile and in
-              emails.
-            </FormText>
+            <FormText>Add a nice title.</FormText>
           </FormGroup>
 
           <FormGroup>
@@ -74,10 +75,7 @@ export default function DashboardAddPost() {
               value={formData.message}
               onChange={handleChange}
             />
-            <FormText>
-              This is the name that will be displayed on your profile and in
-              emails.
-            </FormText>
+            <FormText>And then a message to go with it!</FormText>
           </FormGroup>
         </Form>
       </ModalBody>

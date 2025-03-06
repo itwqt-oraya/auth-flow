@@ -12,11 +12,12 @@ import {
 } from 'reactstrap';
 import {useNavigate, useParams} from 'react-router';
 import {getPost, deletePost} from '@api/dashboard';
+import {getCookie} from '@utils/cookie';
 
 export default function DashboardDeletePost() {
   const {id} = useParams();
-  const {user} = useContext(AuthContext);
-  const token = user.token;
+  const {handleStatusCode, triggerReload} = useContext(AuthContext);
+  const token = getCookie('token');
 
   const nav = useNavigate();
 
@@ -32,8 +33,10 @@ export default function DashboardDeletePost() {
   });
 
   const handleSubmit = () => {
-    deletePost(id, token).then(() => {
-      nav(0);
+    deletePost(id, token).then((res) => {
+      handleStatusCode(res.status);
+      triggerReload();
+      nav(-1);
     });
   };
 

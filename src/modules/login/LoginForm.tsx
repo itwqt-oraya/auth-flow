@@ -2,11 +2,11 @@ import React, {useState, useContext} from 'react';
 import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
 import {login} from '@api/auth';
 import {AuthContext} from '@context/AuthContext';
-import {useNavigate} from 'react-router';
+import {Navigate} from 'react-router';
 
 export default function LoginForm() {
-  const {loginUser} = useContext(AuthContext);
-  const nav = useNavigate();
+  const {loginUser, isAuthenticated} = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -23,37 +23,43 @@ export default function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(formData).then((res) => {
-      loginUser(res.data);
-      if (res.status === 200) {
-        window.location.reload();
-      }
-    });
+    login(formData)
+      .then((res) => {
+        loginUser(res.data, res.status);
+        if (isAuthenticated) {
+          return <Navigate to="/dashboard" replace />;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          name="email"
-          type="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="password">Password</Label>
-        <Input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <Button color="success" type="submit">
-        Login
-      </Button>
-    </Form>
+    <>
+      <Form onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            name="email"
+            type="email"
+            placeholder="Email"
+            onChange={handleChange}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="password">Password</Label>
+          <Input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+          />
+        </FormGroup>
+        <Button outline color="primary" type="submit">
+          Login
+        </Button>
+      </Form>
+    </>
   );
 }

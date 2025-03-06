@@ -10,17 +10,15 @@ import {
   FormGroup,
   Label,
   Input,
-  FormText,
 } from 'reactstrap';
-import {createPost} from '@api/dashboard';
 import {useNavigate, useParams} from 'react-router';
 import {getPost, updatePost} from '@api/dashboard';
+import {getCookie} from '@utils/cookie';
 
 export default function DashboardEditPost() {
   const {id} = useParams();
-  const {user} = useContext(AuthContext);
-  const token = user.token;
-
+  const {handleStatusCode, triggerReload} = useContext(AuthContext);
+  const token = getCookie('token');
   const nav = useNavigate();
 
   useEffect(() => {
@@ -44,8 +42,10 @@ export default function DashboardEditPost() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updatePost(id, formData, token).then(() => {
-      nav(0);
+    updatePost(id, formData, token).then((res) => {
+      handleStatusCode(res.status);
+      triggerReload();
+      nav(-1);
     });
   };
 
@@ -68,10 +68,6 @@ export default function DashboardEditPost() {
               value={formData.title}
               onChange={handleChange}
             />
-            <FormText>
-              This is the name that will be displayed on your profile and in
-              emails.
-            </FormText>
           </FormGroup>
 
           <FormGroup>
@@ -84,10 +80,6 @@ export default function DashboardEditPost() {
               value={formData.message}
               onChange={handleChange}
             />
-            <FormText>
-              This is the name that will be displayed on your profile and in
-              emails.
-            </FormText>
           </FormGroup>
         </Form>
       </ModalBody>
