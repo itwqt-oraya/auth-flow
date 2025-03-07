@@ -58,6 +58,8 @@ function RouteMap() {
           />
         </Route>
 
+        {/* https://github.com/QualityTrade/iaf-frontend-datacontributor/blob/main/src/utils/render-routes.js#L108 */}
+        {/* https://github.com/QualityTrade/iaf-frontend-datacontributor/blob/main/src/views/import-management/index.js */}
         <Route path="/dashboard" element={<PrivateLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="post" element={<DashboardAddPost />} />

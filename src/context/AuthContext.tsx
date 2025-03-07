@@ -82,6 +82,7 @@ export function AuthProvider({children}) {
   // 401 -> unauthorized
   // 403 -> forbidden
   // 404 -> not found
+  // move to http
   function handleStatusCode(status) {
     console.log('Status Code:', status);
     switch (status) {

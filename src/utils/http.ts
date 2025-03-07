@@ -1,5 +1,7 @@
 import axios from 'axios';
+import {getCookie} from '@utils/cookie';
 
+// if token -> add auth header
 export const http = (
   method: string = 'GET',
   url: string,
@@ -25,6 +27,7 @@ export const http = (
       return response;
     })
     .catch((error) => {
+      // status code here -> window location redirect
       console.log(error);
       throw error;
     });

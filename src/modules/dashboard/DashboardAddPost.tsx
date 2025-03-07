@@ -41,6 +41,9 @@ export default function DashboardAddPost() {
     }
 
     e.preventDefault();
+    // form crud login sign
+    // api call: isloading, onsubmit
+    // https://github.com/QualityTrade/iaf-frontend-datacontributor/blob/main/src/views/certification-bodies/v2/view/cb-standards/view/key-locations/assign/index.js#L16
     createPost(formData, token).then((res) => {
       handleStatusCode(res.status);
       triggerReload();
@@ -56,6 +59,7 @@ export default function DashboardAddPost() {
     <Modal isOpen={true} centered>
       <ModalHeader>Create Post</ModalHeader>
       <ModalBody>
+        {/* serialize */}
         <Form>
           <FormGroup>
             <Label for="title" className="fw-bold">
