@@ -10,7 +10,7 @@ export function AuthProvider({children}) {
 
   useEffect(() => {
     const token = getCookie('token');
-    if (token) {
+    if (token && token !== 'undefined') {
       setIsAuthenticated(true);
     }
   }, []);
@@ -40,21 +40,35 @@ export function AuthProvider({children}) {
   // check if cookie still exists and refresh token
   const refreshAuth = () => {
     const token = getCookie('token');
-    if (token) {
+    if (token && token !== 'undefined' && !isAuthenticated) {
       refresh(token).then((res) => {
         if (res.status === 200) {
-          setCookie('token', res.data.token, 1);
+          setCookie('token', res.data.data.token, 1);
           setUser({
-            firstName: res.data.firstName,
-            lastName: res.data.lastName,
-            email: res.data.email,
-            userId: res.data.userId,
-            token: res.data.token,
+            firstName: res.data.data.firstName,
+            lastName: res.data.data.lastName,
+            email: res.data.data.email,
+            userId: res.data.data.userId,
           });
           setIsAuthenticated(true);
         }
+        if (res.status === 401 || res.status === 403) {
+          logoutUser();
+        }
       });
     }
+  };
+
+  const updateUser = (res) => {
+    console.log(res);
+    setUser({
+      firstName: res.data.data.firstName,
+      lastName: res.data.data.lastName,
+      email: res.data.data.email,
+      userId: res.data.data.userId,
+    });
+    setIsAuthenticated(true);
+    setCookie('token', res.data.data.token, 1);
   };
 
   const [reload, setReload] = useState(false);
@@ -102,6 +116,7 @@ export function AuthProvider({children}) {
         handleStatusCode,
         reload,
         triggerReload,
+        updateUser,
       }}
     >
       {children}

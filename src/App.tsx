@@ -15,6 +15,8 @@ import {
   DashboardAddPost,
   DashboardEditPost,
   DashboardDeletePost,
+  DashboardDetails,
+  DashboardPassword,
 } from '@modules/dashboard';
 
 import {AuthProvider} from '@context/AuthContext';
@@ -61,6 +63,8 @@ function RouteMap() {
           <Route path="post" element={<DashboardAddPost />} />
           <Route path="post/edit/:id" element={<DashboardEditPost />} />
           <Route path="post/delete/:id" element={<DashboardDeletePost />} />
+          <Route path="details" element={<DashboardDetails />} />
+          <Route path="password" element={<DashboardPassword />} />
         </Route>
 
         <Route path="*" element={<p>Not found.</p>} />
@@ -77,6 +81,8 @@ function RouteMap() {
             path="/dashboard/post/delete/:id"
             element={<DashboardDeletePost />}
           />
+          <Route path="/dashboard/details" element={<DashboardDetails />} />
+          <Route path="/dashboard/password" element={<DashboardPassword />} />
         </Routes>
       )}
     </>

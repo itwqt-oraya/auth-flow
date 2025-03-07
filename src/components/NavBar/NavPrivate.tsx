@@ -15,17 +15,37 @@ export default function NavPrivate() {
       </Link>
       <>
         <div className="d-flex gap-2">
-          <Button outline variant="danger">
+          <Button outline color="primary">
             <Link
               to="/dashboard/post"
               state={{background: location}}
-              className="text-decoration-none text-dark"
+              className="text-decoration-none"
             >
               Create Post
             </Link>
           </Button>
 
-          <Button variant="primary" onClick={logoutUser}>
+          <Button outline color="primary">
+            <Link
+              to="/dashboard/details"
+              state={{background: location}}
+              className="text-decoration-none"
+            >
+              Change Details
+            </Link>
+          </Button>
+
+          <Button outline color="primary">
+            <Link
+              to="/dashboard/password"
+              state={{background: location}}
+              className="text-decoration-none"
+            >
+              Change Pass
+            </Link>
+          </Button>
+
+          <Button color="danger" onClick={logoutUser}>
             Logout
           </Button>
         </div>

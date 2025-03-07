@@ -4,7 +4,13 @@ import {NavPrivate} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
 
 export default function PrivateLayout() {
-  const {isAuthenticated, refreshAuth} = useContext(AuthContext);
+  const {user, isAuthenticated, refreshAuth} = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      refreshAuth();
+    }
+  }, [isAuthenticated, refreshAuth, user]);
 
   return (
     <>

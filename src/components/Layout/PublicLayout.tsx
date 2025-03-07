@@ -5,7 +5,14 @@ import {Nav} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
 
 export default function PublicLayout({children}) {
-  const {isAuthenticated, refreshAuth} = useContext(AuthContext);
+  const {isAuthenticated, user, refreshAuth} = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!isAuthenticated && !user) {
+      refreshAuth();
+    }
+  }, [isAuthenticated, refreshAuth, user]);
+
   return (
     <>
       {isAuthenticated ? <Navigate to="/dashboard" /> : null}
