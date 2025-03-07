@@ -35,6 +35,11 @@ export default function DashboardAddPost() {
   };
 
   const handleSubmit = (e) => {
+    if (!formData.title || !formData.message) {
+      alert('Please fill out all fields');
+      return;
+    }
+
     e.preventDefault();
     createPost(formData, token).then((res) => {
       handleStatusCode(res.status);

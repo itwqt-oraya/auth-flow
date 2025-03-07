@@ -50,11 +50,11 @@ export default function DashboardDeletePost() {
       <ModalBody>
         <Form>
           <FormGroup>
-            <Label for="title" className="fw-bold w-100 text-center">
+            <Label for="title" className="fw-bold w-100 mb-3 text-center">
               Are you sure you want to delete this post?
             </Label>
 
-            <h4 className="text-center">{formData.title}</h4>
+            <h5 className="text-center mb-0">{formData.title}</h5>
             <p className="text-muted text-center fst-italic">
               {formData.message || 'This post does not have a message.'}
             </p>

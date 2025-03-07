@@ -38,6 +38,15 @@ export default function DashboardPassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (
+      !formData.oldPassword ||
+      !formData.newPassword ||
+      !formData.confirmPassword
+    ) {
+      alert('Please fill out all fields');
+      return;
+    }
+
     if (!samePassword(formData.newPassword, formData.confirmPassword)) {
       alert('Passwords do not match');
       return;
