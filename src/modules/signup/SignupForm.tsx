@@ -21,7 +21,22 @@ export default function SignupForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signup(formData);
+
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password
+    ) {
+      alert('Please fill out all fields');
+      return;
+    }
+
+    signup(formData).then((res) => {
+      if (res.status === 200) {
+        alert('Signup successful');
+      }
+    });
   };
 
   return (

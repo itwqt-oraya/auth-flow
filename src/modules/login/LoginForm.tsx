@@ -23,6 +23,12 @@ export default function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      alert('Please fill out all fields');
+      return;
+    }
+
     login(formData)
       .then((res) => {
         loginUser(res.data, res.status);

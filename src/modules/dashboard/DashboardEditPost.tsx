@@ -42,6 +42,12 @@ export default function DashboardEditPost() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!formData.title || !formData.message) {
+      alert('Please fill out all fields');
+      return;
+    }
+
     updatePost(id, formData, token).then((res) => {
       handleStatusCode(res.status);
       triggerReload();

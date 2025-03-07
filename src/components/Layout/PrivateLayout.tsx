@@ -7,7 +7,7 @@ export default function PrivateLayout() {
   const {user, isAuthenticated, refreshAuth} = useContext(AuthContext);
 
   useEffect(() => {
-    if (!isAuthenticated || !user) {
+    if (!isAuthenticated && !user) {
       refreshAuth();
     }
   }, [isAuthenticated, refreshAuth, user]);

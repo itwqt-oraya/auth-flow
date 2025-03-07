@@ -47,6 +47,14 @@ export default function DashboardPassword() {
       return;
     }
 
+    if (
+      formData.oldPassword === formData.newPassword ||
+      formData.oldPassword === user.password
+    ) {
+      alert('New password cannot be the same as the old password');
+      return;
+    }
+
     if (!samePassword(formData.newPassword, formData.confirmPassword)) {
       alert('Passwords do not match');
       return;

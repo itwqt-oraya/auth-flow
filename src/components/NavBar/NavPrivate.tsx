@@ -1,6 +1,14 @@
 import React, {useContext, useState} from 'react';
 import {useLocation, Link} from 'react-router';
-import {Button} from 'reactstrap';
+import {
+  Button,
+  NavbarToggler,
+  Collapse,
+  Nav,
+  NavItem,
+  Navbar,
+  NavbarBrand,
+} from 'reactstrap';
 import {AuthContext} from '@context/AuthContext';
 
 export default function NavPrivate() {
@@ -8,24 +16,20 @@ export default function NavPrivate() {
   const userName = `${user.firstName} ${user.lastName}`;
   const location = useLocation();
 
+  const [collapsed, setCollapsed] = useState(true);
+  const toggleNavbar = () => setCollapsed(!collapsed);
   return (
-    <nav className="d-flex justify-content-between w-100 gap-2 p-3 border-bottom">
-      <Link to="/" className="text-decoration-none">
-        <h2>{isAuthenticated ? `${userName}` : 'Blog'}</h2>
-      </Link>
-      <>
-        <div className="d-flex gap-2">
-          <Button outline color="primary">
-            <Link
-              to="/dashboard/post"
-              state={{background: location}}
-              className="text-decoration-none"
-            >
-              Create Post
-            </Link>
-          </Button>
+    <Navbar className="d-flex justify-content-between w-100 gap-2 p-3 border-bottom">
+      <NavbarBrand>
+        <Link to="/" className="text-decoration-none">
+          <h2>{isAuthenticated ? `${userName}` : 'Blog'}</h2>
+        </Link>
+      </NavbarBrand>
 
-          <Button outline color="primary">
+      <NavbarToggler onClick={toggleNavbar} className="me-2" />
+      <Collapse isOpen={!collapsed} navbar>
+        <Nav navbar align="end">
+          <NavItem>
             <Link
               to="/dashboard/details"
               state={{background: location}}
@@ -33,9 +37,8 @@ export default function NavPrivate() {
             >
               Change Details
             </Link>
-          </Button>
-
-          <Button outline color="primary">
+          </NavItem>
+          <NavItem>
             <Link
               to="/dashboard/password"
               state={{background: location}}
@@ -43,13 +46,15 @@ export default function NavPrivate() {
             >
               Change Pass
             </Link>
-          </Button>
-
-          <Button color="danger" onClick={logoutUser}>
-            Logout
-          </Button>
-        </div>
-      </>
-    </nav>
+          </NavItem>
+          <hr />
+          <NavItem>
+            <Button color="danger" onClick={logoutUser}>
+              Logout
+            </Button>
+          </NavItem>
+        </Nav>
+      </Collapse>
+    </Navbar>
   );
 }

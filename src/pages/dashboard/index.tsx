@@ -1,11 +1,9 @@
 import React from 'react';
-import {GetPosts} from '@components/Dashboard';
-
+import {DashboardGetPost} from '@modules/dashboard';
 export default function index() {
   return (
     <main className="container py-3">
-      <h3>Your Posts</h3>
-      <GetPosts />
+      <DashboardGetPost />
     </main>
   );
 }
