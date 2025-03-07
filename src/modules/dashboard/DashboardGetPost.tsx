@@ -34,7 +34,43 @@ export default function DashboardGetPost() {
         </Link>
       </div>
 
-      <Table bordered hover responsive>
+      <div className="row d-flex justify-content-around gap-2 p-2">
+        {posts.map((post, index) => (
+          <>
+            <div
+              className="col-sm d-flex flex-column justify-content-between p-3 border rounded"
+              key={index}
+            >
+              <div>
+                <h5>{post.title}</h5>
+                <p className="text-muted">{post.message}</p>
+              </div>
+              <p className="text-muted">{transformDate(post.createdAt)}</p>
+
+              <div className="d-flex gap-2">
+                <Link
+                  to={`/dashboard/post/edit/${post.postId}`}
+                  state={{background: location}}
+                >
+                  <Button outline color="primary" size="sm">
+                    Edit
+                  </Button>
+                </Link>
+                <Link
+                  to={`/dashboard/post/delete/${post.postId}`}
+                  state={{background: location}}
+                >
+                  <Button outline color="danger" size="sm">
+                    Delete
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </>
+        ))}
+      </div>
+
+      {/* <Table bordered hover responsive>
         <thead>
           <tr>
             <th>Date</th>
@@ -70,7 +106,7 @@ export default function DashboardGetPost() {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table> */}
     </section>
   );
 }

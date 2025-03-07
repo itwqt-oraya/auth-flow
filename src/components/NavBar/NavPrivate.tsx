@@ -20,14 +20,12 @@ export default function NavPrivate() {
   const toggleNavbar = () => setCollapsed(!collapsed);
   return (
     <Navbar className="d-flex justify-content-between w-100 gap-2 p-3 border-bottom">
-      <NavbarBrand>
-        <Link to="/" className="text-decoration-none">
-          <h2>{isAuthenticated ? `${userName}` : 'Blog'}</h2>
-        </Link>
-      </NavbarBrand>
+      <Link to="/" className="text-decoration-none">
+        <h2>{isAuthenticated ? `${userName}` : 'Blog'}</h2>
+      </Link>
 
       <NavbarToggler onClick={toggleNavbar} className="me-2" />
-      <Collapse isOpen={!collapsed} navbar>
+      <Collapse isOpen={!collapsed} navbar className="mt-3">
         <Nav navbar align="end">
           <NavItem>
             <Link

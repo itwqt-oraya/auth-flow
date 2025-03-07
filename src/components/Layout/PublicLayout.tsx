@@ -5,7 +5,7 @@ import {Nav} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
 
 export default function PublicLayout({children}) {
-  const {isAuthenticated, user, refreshAuth} = useContext(AuthContext);
+  const {isAuthenticated, user} = useContext(AuthContext);
   const nav = useNavigate();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function PublicLayout({children}) {
     } else {
       nav('/');
     }
-  }, [isAuthenticated, refreshAuth, user]);
+  }, [isAuthenticated, user]);
 
   return (
     <>
