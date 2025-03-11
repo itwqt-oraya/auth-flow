@@ -25,10 +25,13 @@ export default function DashboardPassword({isOpen, toggle}) {
   });
 
   const onSubmit: SubmitHandler<PasswordInput> = async (data) => {
-    await changePassword(data);
-    if (isToggle) {
-      handleClose();
+    const res = await changePassword(data);
+    if (res.status === 400) {
+      alert('Error changing password');
+      return;
     }
+    alert('Password changed successfully');
+    toggle();
   };
 
   const handleClose = () => {
@@ -49,7 +52,6 @@ export default function DashboardPassword({isOpen, toggle}) {
     <Modal isOpen={isOpen} centered>
       <ModalHeader>Change Password</ModalHeader>
       <ModalBody>
-        {error && <div className="text-danger">{error}</div>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label htmlFor="oldPassword" className="form-label">
