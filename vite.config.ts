@@ -14,6 +14,7 @@ export default defineConfig({
       '@context': '/src/context',
       '@modules': '/src/modules',
       '@api': '/src/api',
+      '@routes': '/src/routes',
     },
   },
   server: {

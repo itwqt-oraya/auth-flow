@@ -1,5 +1,5 @@
 import React, {useContext, useEffect} from 'react';
-import {Navigate, useNavigate} from 'react-router';
+import {Navigate, useNavigate, Outlet} from 'react-router';
 import {Container} from 'reactstrap';
 import {Nav} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
@@ -20,7 +20,10 @@ export default function PublicLayout({children}) {
     <>
       {isAuthenticated ? <Navigate to="/dashboard" /> : null}
       <Nav />
-      <Container>{children}</Container>
+      <Container>
+        {children}
+        <Outlet />
+      </Container>
     </>
   );
 }
