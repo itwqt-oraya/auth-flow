@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router';
 import {
-  Button,
-  NavbarToggler,
-  Collapse,
-  Nav,
-  NavItem,
   Navbar,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from 'reactstrap';
+
 import {AuthContext} from '@context/AuthContext';
 
 import {DashboardPassword, DashboardDetails} from '@modules/dashboard';
@@ -16,7 +16,7 @@ export default function NavPrivate() {
   const {user, isAuthenticated, logoutUser} = useContext(AuthContext);
   const userName = `${user.firstName} ${user.lastName}`;
 
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const toggleNavbar = () => setCollapsed(!collapsed);
 
   // Modal state toggles
@@ -30,28 +30,32 @@ export default function NavPrivate() {
       <DashboardDetails isOpen={isDetailsOpen} toggle={toggleDetails} />
       <DashboardPassword isOpen={isPasswordOpen} toggle={togglePassword} />
 
-      <Navbar className="d-flex justify-content-between w-100 gap-2 p-3 border-bottom">
-        <Link to="/" className="text-decoration-none">
-          <h2>{isAuthenticated ? `${userName}` : 'Blog'}</h2>
+      <Navbar
+        sticky="top"
+        className="d-flex bg-white justify-content-between w-100 gap-2 py-3 border-dark-subtle border-bottom"
+      >
+        <Link to="/" className="text-decoration-none text-dark">
+          <h4 className="mb-0">{isAuthenticated ? `${userName}` : 'Blog'}</h4>
         </Link>
 
-        <NavbarToggler onClick={toggleNavbar} className="me-2" />
-        <Collapse isOpen={!collapsed} navbar className="mt-3">
-          <Nav navbar align="end">
-            <NavItem>
-              <Button onClick={toggleDetails}>Change Details</Button>
-            </NavItem>
-            <NavItem>
-              <Button onClick={togglePassword}>Change Pass</Button>
-            </NavItem>
-            <hr />
-            <NavItem>
-              <Button color="danger" onClick={logoutUser}>
-                Logout
-              </Button>
-            </NavItem>
-          </Nav>
-        </Collapse>
+        <Dropdown
+          isOpen={collapsed}
+          toggle={toggleNavbar}
+          direction="down"
+          inNavbar
+        >
+          <DropdownToggle color="dark" caret>
+            Settings
+          </DropdownToggle>
+          <DropdownMenu dark className="mt-1" end>
+            <DropdownItem onClick={toggleDetails}>Update Details</DropdownItem>
+            <DropdownItem onClick={togglePassword}>
+              Change Password
+            </DropdownItem>
+            <DropdownItem divider />
+            <DropdownItem onClick={logoutUser}>Logout</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
       </Navbar>
     </>
   );

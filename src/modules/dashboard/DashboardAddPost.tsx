@@ -35,12 +35,17 @@ export default function DashboardAddPost({isOpen, toggle, reload}) {
 
   return (
     <Modal isOpen={isOpen} centered>
-      <ModalHeader>Create Post</ModalHeader>
+      <ModalHeader tag={'h6'}>
+        <div>
+          <h5 className="mb-1">Create Post</h5>
+          <p className="text-muted mb-0">Posts will appear on the dashboard.</p>
+        </div>
+      </ModalHeader>
       <ModalBody>
         {/* serialize */}
         <form>
           <div className="mb-3">
-            <label htmlFor="title" className="form-label fw-bold">
+            <label htmlFor="title" className="form-label fw-semibold mb-1">
               Title <span className="text-danger">*</span>
             </label>
             <input
@@ -57,7 +62,7 @@ export default function DashboardAddPost({isOpen, toggle, reload}) {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="message" className="form-label fw-bold">
+            <label htmlFor="message" className="form-label fw-semibold mb-1">
               Message <span className="text-danger">*</span>
             </label>
             <input
@@ -74,14 +79,10 @@ export default function DashboardAddPost({isOpen, toggle, reload}) {
           </div>
 
           <ModalFooter>
-            <Button
-              color="primary"
-              type="submit"
-              onClick={handleSubmit(onSubmit)}
-            >
+            <Button color="dark" type="submit" onClick={handleSubmit(onSubmit)}>
               Submit
             </Button>
-            <Button color="secondary" onClick={handleClose}>
+            <Button color="dark" outline onClick={handleClose}>
               Cancel
             </Button>
           </ModalFooter>

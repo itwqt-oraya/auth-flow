@@ -37,7 +37,7 @@ export default function SignupForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
-        <label htmlFor="firstName" className="form-label fw-bold">
+        <label htmlFor="firstName" className="form-label fw-semibold">
           First Name <span className="text-danger">*</span>
         </label>
         <input
@@ -54,7 +54,7 @@ export default function SignupForm() {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="lastName" className="form-label fw-bold">
+        <label htmlFor="lastName" className="form-label fw-semibold">
           Last Name <span className="text-danger">*</span>
         </label>
         <input
@@ -71,7 +71,7 @@ export default function SignupForm() {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="email" className="form-label fw-bold">
+        <label htmlFor="email" className="form-label fw-semibold">
           Email <span className="text-danger">*</span>
         </label>
         <input
@@ -88,7 +88,7 @@ export default function SignupForm() {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="password" className="form-label fw-bold">
+        <label htmlFor="password" className="form-label fw-semibold">
           Password <span className="text-danger">*</span>
         </label>
         <input
@@ -103,7 +103,7 @@ export default function SignupForm() {
           </span>
         )}
       </div>
-      <Button type="submit" color="primary">
+      <Button type="submit" color="dark" block>
         Signup
       </Button>
     </form>

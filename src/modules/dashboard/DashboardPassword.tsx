@@ -31,7 +31,7 @@ export default function DashboardPassword({isOpen, toggle}) {
       return;
     }
     alert('Password changed successfully');
-    toggle();
+    handleClose();
   };
 
   const handleClose = () => {
@@ -50,12 +50,20 @@ export default function DashboardPassword({isOpen, toggle}) {
 
   return (
     <Modal isOpen={isOpen} centered>
-      <ModalHeader>Change Password</ModalHeader>
+      <ModalHeader tag={'h6'}>
+        <div>
+          <h5 className="mb-1">Change Password</h5>
+          <p className="text-muted mb-0">Manage your account information.</p>
+        </div>
+      </ModalHeader>
       <ModalBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
-            <label htmlFor="oldPassword" className="form-label">
-              Old Password
+            <label
+              htmlFor="oldPassword"
+              className="form-label fw-semibold mb-1"
+            >
+              Old Password <span className="text-danger">*</span>
             </label>
             <input
               type="password"
@@ -69,8 +77,11 @@ export default function DashboardPassword({isOpen, toggle}) {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="newPassword" className="form-label">
-              New Password
+            <label
+              htmlFor="newPassword"
+              className="form-label fw-semibold mb-1"
+            >
+              New Password <span className="text-danger">*</span>
             </label>
             <input
               type="password"
@@ -84,8 +95,11 @@ export default function DashboardPassword({isOpen, toggle}) {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label">
-              Confirm Password
+            <label
+              htmlFor="confirmPassword"
+              className="form-label fw-semibold mb-1"
+            >
+              Confirm Password <span className="text-danger">*</span>
             </label>
             <input
               type="password"
@@ -102,10 +116,10 @@ export default function DashboardPassword({isOpen, toggle}) {
               )}
           </div>
           <ModalFooter>
-            <Button color="primary" type="submit">
+            <Button color="dark" type="submit">
               Submit
             </Button>
-            <Button color="secondary" onClick={handleClose}>
+            <Button color="dark" outline onClick={handleClose}>
               Cancel
             </Button>
           </ModalFooter>

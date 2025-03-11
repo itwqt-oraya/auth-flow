@@ -57,13 +57,11 @@ export default function DashboardGetPost() {
       />
 
       <div className="d-flex align-items-center justify-content-between">
-        <h3>Posts</h3>
-        <Button
-          outline
-          color="primary"
-          className="mb-3"
-          onClick={toggleAddModal}
-        >
+        <div>
+          <h6 className="mb-0">Posts</h6>
+          <p className="text-muted">Your posts are displayed here.</p>
+        </div>
+        <Button outline color="dark" className="mb-3" onClick={toggleAddModal}>
           Create Post
         </Button>
       </div>
@@ -77,15 +75,19 @@ export default function DashboardGetPost() {
             key={index}
           >
             <div>
-              <h5>{post.title}</h5>
-              <p className="text-muted">{post.message}</p>
+              <div className="d-flex justify-content-between align-items-center">
+                <p className="mb-0 fw-bold">{post.title}</p>
+                <p className="mb-0 text-muted">
+                  {transformDate(post.updatedAt)}
+                </p>
+              </div>
+              <p className="text-muted text-break">{post.message}</p>
             </div>
-            <p className="text-muted">{transformDate(post.createdAt)}</p>
 
             <div className="d-flex gap-2">
               <Button
                 outline
-                color="primary"
+                color="dark"
                 size="sm"
                 onClick={() => {
                   toggleEditModal();
@@ -97,7 +99,7 @@ export default function DashboardGetPost() {
 
               <Button
                 outline
-                color="danger"
+                color="dark"
                 size="sm"
                 onClick={() => {
                   toggleDeleteModal();
@@ -110,44 +112,6 @@ export default function DashboardGetPost() {
           </div>
         ))}
       </div>
-
-      {/* <Table bordered hover responsive>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Title</th>
-            <th>Message</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {posts.map((post, index) => (
-            <tr key={index}>
-              <td>{transformDate(post.createdAt)}</td>
-              <td>{post.title}</td>
-              <td>{post.message}</td>
-              <td>
-                <Link
-                  to={`/dashboard/post/edit/${post.postId}`}
-                  state={{background: location}}
-                >
-                  <Button outline color="primary" size="sm">
-                    Edit
-                  </Button>
-                </Link>
-                <Link
-                  to={`/dashboard/post/delete/${post.postId}`}
-                  state={{background: location}}
-                >
-                  <Button outline color="danger" size="sm">
-                    Delete
-                  </Button>
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table> */}
     </section>
   );
 }

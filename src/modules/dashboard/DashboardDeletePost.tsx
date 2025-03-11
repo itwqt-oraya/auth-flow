@@ -10,6 +10,7 @@ import {
   Label,
 } from 'reactstrap';
 import {useDeletePost, useGetPostById} from '@modules/dashboard/';
+import {CiWarning} from 'react-icons/ci';
 
 export default function DashboardDeletePost({isOpen, toggle, id, reload}) {
   const {error, deleteApi} = useDeletePost();
@@ -47,15 +48,20 @@ export default function DashboardDeletePost({isOpen, toggle, id, reload}) {
 
   return (
     <Modal isOpen={isOpen} centered>
-      <ModalHeader>Delete Post</ModalHeader>
+      <ModalHeader tag={'h6'}>
+        <div>
+          <h5 className="mb-1">Delete Post</h5>
+          <p className="text-muted mb-0">
+            Are you sure you want to delete this post?
+          </p>
+        </div>
+      </ModalHeader>
       <ModalBody>
         <Form>
           <FormGroup>
-            <Label for="title" className="fw-bold w-100 mb-3 text-center">
-              Are you sure you want to delete this post?
-            </Label>
+            <CiWarning className="text-danger w-100 fs-1 text-center mb-2" />
 
-            <h5 className="text-center mb-0">{formData.title}</h5>
+            <h6 className="text-center text-semibold mb-0">{formData.title}</h6>
             <p className="text-muted text-center fst-italic">
               {formData.message || 'This post does not have a message.'}
             </p>
@@ -63,10 +69,10 @@ export default function DashboardDeletePost({isOpen, toggle, id, reload}) {
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button color="danger" type="submit" onClick={handleSubmit}>
+        <Button color="dark" type="submit" onClick={handleSubmit}>
           Delete
         </Button>
-        <Button color="secondary" onClick={handleClose}>
+        <Button color="dark" outline onClick={handleClose}>
           Cancel
         </Button>
       </ModalFooter>
