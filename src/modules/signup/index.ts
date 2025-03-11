@@ -1,3 +1,3 @@
 import SignupForm from './SignupForm.tsx';
-
-export {SignupForm};
+import {useSignup} from './useSignup.ts';
+export {SignupForm, useSignup};

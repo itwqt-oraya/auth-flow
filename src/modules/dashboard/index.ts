@@ -11,7 +11,8 @@ import {useAddPost} from './useAddPost.ts';
 import {useDeletePost} from './useDeletePost.ts';
 import {useEditPost} from './useEditPost.ts';
 import {useGetPostById} from './useGetPostById.ts';
-
+import {useEditUser} from './useEditUser.ts';
+import {useChangePassword} from './useChangePassword.ts';
 export {
   DashboardGetPost,
   DashboardAddPost,
@@ -24,4 +25,6 @@ export {
   useDeletePost,
   useEditPost,
   useGetPostById,
+  useEditUser,
+  useChangePassword,
 };

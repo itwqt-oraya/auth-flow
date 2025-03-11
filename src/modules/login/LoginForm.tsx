@@ -1,71 +1,74 @@
-import React, {useState, useContext} from 'react';
-import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
-import {login} from '@api/auth';
-import {AuthContext} from '@context/AuthContext';
-import {Navigate} from 'react-router';
+import {Button} from 'reactstrap';
+import {useForm, SubmitHandler} from 'react-hook-form';
+import {useLogin} from '@modules/login';
+
+interface LoginInput {
+  email: string;
+  password: string;
+}
 
 export default function LoginForm() {
-  const {loginUser, isAuthenticated} = useContext(AuthContext);
+  const {loading, postLogin} = useLogin();
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<LoginInput>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const onSubmit: SubmitHandler<LoginInput> = async (data) => {
+    await postLogin(data);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!formData.email || !formData.password) {
-      alert('Please fill out all fields');
-      return;
-    }
-
-    login(formData)
-      .then((res) => {
-        loginUser(res.data, res.status);
-        if (isAuthenticated) {
-          return <Navigate to="/dashboard" replace />;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            name="email"
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label fw-bold">
+            Email <span className="text-danger">*</span>
+          </label>
+          <input
             type="email"
-            placeholder="Email"
-            onChange={handleChange}
+            className="form-control mb-2"
+            id="email"
+            {...register('email', {required: true})}
           />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="password">Password</Label>
-          <Input
-            name="password"
+          {errors.email && (
+            <span className="text-danger fst-italic">
+              This field is required.
+            </span>
+          )}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label fw-bold">
+            Password <span className="text-danger">*</span>
+          </label>
+          <input
             type="password"
-            placeholder="Password"
-            onChange={handleChange}
+            className="form-control mb-2"
+            id="password"
+            {...register('password', {required: true})}
           />
-        </FormGroup>
-        <Button outline color="primary" type="submit">
+          {errors.password && (
+            <span className="text-danger fst-italic">
+              This field is required.
+            </span>
+          )}
+        </div>
+        <Button type="submit" color="primary">
           Login
         </Button>
-      </Form>
+      </form>
     </>
   );
 }

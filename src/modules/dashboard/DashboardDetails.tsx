@@ -1,49 +1,50 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {AuthContext} from '@context/AuthContext';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-} from 'reactstrap';
-import {useNavigate} from 'react-router';
-import {details} from '@api/user';
-import {getCookie} from '@utils/cookie';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {useEditUser} from '@modules/dashboard/';
+import {useForm, SubmitHandler} from 'react-hook-form';
+
+interface UserInput {
+  firstName: string;
+  lastName: string;
+}
 
 export default function DashboardDetails({isOpen, toggle}) {
-  const {user, handleStatusCode, updateUser, triggerReload} =
-    useContext(AuthContext);
-  const token = getCookie('token');
+  const {user} = useContext(AuthContext);
 
-  const [formData, setFormData] = useState({
-    firstName: user.firstName,
-    lastName: user.lastName,
+  const {putEdit} = useEditUser();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm<UserInput>({
+    defaultValues: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+    },
   });
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  useEffect(() => {
+    const defaultValues = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+    reset(defaultValues);
+  }, [user]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    details(formData, token).then((res) => {
-      updateUser(res);
-      handleStatusCode(res.status);
-      triggerReload();
-      toggle();
-    });
+  const onSubmit: SubmitHandler<UserInput> = async (data) => {
+    await putEdit(data);
+    toggle();
   };
 
   const handleClose = () => {
+    const defaultValues = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+    reset(defaultValues);
     toggle();
   };
 
@@ -51,40 +52,40 @@ export default function DashboardDetails({isOpen, toggle}) {
     <Modal isOpen={isOpen} centered>
       <ModalHeader>Edit User</ModalHeader>
       <ModalBody>
-        <Form>
-          <FormGroup>
-            <Label for="firstName" className="fw-bold">
-              First Name <span className="text-danger">*</span>
-            </Label>
-            <Input
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-3">
+            <label htmlFor="firstName" className="form-label">
+              First Name
+            </label>
+            <input
               type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
+              className="form-control"
+              id="firstName"
+              {...register('firstName')}
             />
-          </FormGroup>
+          </div>
 
-          <FormGroup>
-            <Label for="lastName" className="fw-bold">
-              Last Name <span className="text-danger">*</span>
-            </Label>
-            <Input
+          <div className="mb-3">
+            <label htmlFor="lastName" className="form-label">
+              Last Name
+            </label>
+            <input
               type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
+              className="form-control"
+              id="lastName"
+              {...register('lastName')}
             />
-          </FormGroup>
-        </Form>
+          </div>
+          <ModalFooter>
+            <Button color="primary" type="submit">
+              Submit
+            </Button>
+            <Button color="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalBody>
-      <ModalFooter>
-        <Button color="primary" type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
-        <Button color="secondary" onClick={handleClose}>
-          Cancel
-        </Button>
-      </ModalFooter>
     </Modal>
   );
 }

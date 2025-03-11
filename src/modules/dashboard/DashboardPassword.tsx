@@ -1,130 +1,114 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {AuthContext} from '@context/AuthContext';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-} from 'reactstrap';
-import {useNavigate} from 'react-router';
-import {password} from '@api/user';
-import {getCookie} from '@utils/cookie';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {useChangePassword} from '@modules/dashboard/';
+import {useForm, SubmitHandler} from 'react-hook-form';
+
+interface PasswordInput {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 
 export default function DashboardPassword({isOpen, toggle}) {
-  const {user, handleStatusCode, updateUser, triggerReload} =
-    useContext(AuthContext);
-  const token = getCookie('token');
+  const {loading, error, isToggle, changePassword} = useChangePassword();
 
-  const [formData, setFormData] = useState({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm<PasswordInput>({
+    defaultValues: {
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
   });
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (
-      !formData.oldPassword ||
-      !formData.newPassword ||
-      !formData.confirmPassword
-    ) {
-      alert('Please fill out all fields');
-      return;
+  const onSubmit: SubmitHandler<PasswordInput> = async (data) => {
+    await changePassword(data);
+    if (isToggle) {
+      handleClose();
     }
-
-    if (
-      formData.oldPassword === formData.newPassword ||
-      formData.oldPassword === user.password
-    ) {
-      alert('New password cannot be the same as the old password');
-      return;
-    }
-
-    if (!samePassword(formData.newPassword, formData.confirmPassword)) {
-      alert('Passwords do not match');
-      return;
-    }
-
-    password(formData, token).then((res) => {
-      updateUser(res);
-      handleStatusCode(res.status);
-      triggerReload();
-      toggle();
-    });
   };
 
   const handleClose = () => {
+    const defaultValues = {
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    };
+    reset(defaultValues);
     toggle();
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Modal isOpen={isOpen} centered>
       <ModalHeader>Change Password</ModalHeader>
       <ModalBody>
-        <Form>
-          <FormGroup>
-            <Label for="firstName" className="fw-bold">
-              Old Password <span className="text-danger">*</span>
-            </Label>
-            <Input
-              type="text"
-              name="oldPassword"
-              value={formData.oldPassword}
-              onChange={handleChange}
+        {error && <div className="text-danger">{error}</div>}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-3">
+            <label htmlFor="oldPassword" className="form-label">
+              Old Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="oldPassword"
+              {...register('oldPassword', {required: true})}
             />
-          </FormGroup>
+            {errors.oldPassword && (
+              <span className="text-danger">This field is required</span>
+            )}
+          </div>
 
-          <FormGroup>
-            <Label for="newPassword" className="fw-bold">
-              New Password <span className="text-danger">*</span>
-            </Label>
-            <Input
-              type="text"
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleChange}
+          <div className="mb-3">
+            <label htmlFor="newPassword" className="form-label">
+              New Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="newPassword"
+              {...register('newPassword', {required: true})}
             />
-          </FormGroup>
+            {errors.newPassword && (
+              <span className="text-danger">This field is required</span>
+            )}
+          </div>
 
-          <FormGroup>
-            <Label for="confirmPassword" className="fw-bold">
-              Confirm Password <span className="text-danger">*</span>
-            </Label>
-            <Input
-              type="text"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
+          <div className="mb-3">
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="confirmPassword"
+              {...register('confirmPassword', {required: true})}
             />
-          </FormGroup>
-        </Form>
+            {errors.confirmPassword && (
+              <span className="text-danger">This field is required</span>
+            )}
+            {errors.confirmPassword &&
+              errors.confirmPassword.type === 'validate' && (
+                <span className="text-danger">Passwords do not match</span>
+              )}
+          </div>
+          <ModalFooter>
+            <Button color="primary" type="submit">
+              Submit
+            </Button>
+            <Button color="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalBody>
-      <ModalFooter>
-        <Button color="primary" type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
-        <Button color="secondary" onClick={handleClose}>
-          Cancel
-        </Button>
-      </ModalFooter>
     </Modal>
   );
-}
-
-function samePassword(password, confirmPassword) {
-  return password === confirmPassword;
 }

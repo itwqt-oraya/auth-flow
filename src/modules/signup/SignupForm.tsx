@@ -1,86 +1,111 @@
-import React, {useState} from 'react';
-import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
-import {signup} from '@api/auth';
+import {Button} from 'reactstrap';
+import {useForm, SubmitHandler} from 'react-hook-form';
+
+import {useSignup} from '@modules/signup';
+
+interface SignupInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 export default function SignupForm() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
+  const {loading, postSignup} = useSignup();
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<SignupInput>({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    },
   });
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const onSubmit: SubmitHandler<SignupInput> = async (data) => {
+    await postSignup(data);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.email ||
-      !formData.password
-    ) {
-      alert('Please fill out all fields');
-      return;
-    }
-
-    signup(formData).then((res) => {
-      if (res.status === 200) {
-        alert('Signup successful');
-      }
-    });
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormGroup>
-        <Label htmlFor="firstName">First Name</Label>
-        <Input
-          name="firstName"
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-3">
+        <label htmlFor="firstName" className="form-label fw-bold">
+          First Name <span className="text-danger">*</span>
+        </label>
+        <input
           type="text"
-          placeholder="First Name"
-          onChange={handleChange}
+          className="form-control mb-2"
+          id="firstName"
+          {...register('firstName', {required: true})}
         />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="lastName">Last Name</Label>
-        <Input
-          name="lastName"
-          type="text"
-          placeholder="Last Name"
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          name="email"
-          type="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="password">Password</Label>
-        <Input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
-      </FormGroup>
+        {errors.firstName && (
+          <span className="text-danger fst-italic">
+            This field is required.
+          </span>
+        )}
+      </div>
 
-      <Button color="success" type="submit">
-        Submit
+      <div className="mb-3">
+        <label htmlFor="lastName" className="form-label fw-bold">
+          Last Name <span className="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          className="form-control mb-2"
+          id="lastName"
+          {...register('lastName', {required: true})}
+        />
+        {errors.lastName && (
+          <span className="text-danger fst-italic">
+            This field is required.
+          </span>
+        )}
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="email" className="form-label fw-bold">
+          Email <span className="text-danger">*</span>
+        </label>
+        <input
+          type="email"
+          className="form-control mb-2"
+          id="email"
+          {...register('email', {required: true})}
+        />
+        {errors.email && (
+          <span className="text-danger fst-italic">
+            This field is required.
+          </span>
+        )}
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="password" className="form-label fw-bold">
+          Password <span className="text-danger">*</span>
+        </label>
+        <input
+          type="password"
+          className="form-control mb-2"
+          id="password"
+          {...register('password', {required: true})}
+        />
+        {errors.password && (
+          <span className="text-danger fst-italic">
+            This field is required.
+          </span>
+        )}
+      </div>
+      <Button type="submit" color="primary">
+        Signup
       </Button>
-    </Form>
+    </form>
   );
 }
