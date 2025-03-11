@@ -10,6 +10,8 @@ import {useGetPost} from './useGetPost.ts';
 import {useAddPost} from './useAddPost.ts';
 import {useDeletePost} from './useDeletePost.ts';
 import {useEditPost} from './useEditPost.ts';
+import {useGetPostById} from './useGetPostById.ts';
+
 export {
   DashboardGetPost,
   DashboardAddPost,
@@ -21,4 +23,5 @@ export {
   useAddPost,
   useDeletePost,
   useEditPost,
+  useGetPostById,
 };

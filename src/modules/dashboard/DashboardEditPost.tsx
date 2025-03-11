@@ -1,5 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {AuthContext} from '@context/AuthContext';
+import React, {useState, useEffect} from 'react';
 import {
   Button,
   Modal,
@@ -11,23 +10,26 @@ import {
   Label,
   Input,
 } from 'reactstrap';
-import {getPost, updatePost} from '@api/dashboard';
-import {getCookie} from '@utils/cookie';
-import {useEditPost, useGetPost} from '@modules/dashboard/';
+import {useEditPost, useGetPostById} from '@modules/dashboard/';
 
 export default function DashboardEditPost({isOpen, toggle, id, reload}) {
   const {put, error} = useEditPost();
-  const {response} = useGetPost();
+  const {fetch, response} = useGetPostById();
+
   const [formData, setFormData] = useState({
     title: '',
     message: '',
   });
 
   useEffect(() => {
-    if (response.data) {
+    fetch(id);
+  }, [id]);
+
+  useEffect(() => {
+    if (response) {
       setFormData({
-        title: response.data.title,
-        message: response.data.message,
+        title: response.title,
+        message: response.message,
       });
     }
   }, [response]);

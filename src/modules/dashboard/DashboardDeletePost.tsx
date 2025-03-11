@@ -9,11 +9,11 @@ import {
   FormGroup,
   Label,
 } from 'reactstrap';
-import {useDeletePost, useGetPost} from '@modules/dashboard/';
+import {useDeletePost, useGetPostById} from '@modules/dashboard/';
 
 export default function DashboardDeletePost({isOpen, toggle, id, reload}) {
   const {error, deleteApi} = useDeletePost();
-  const {response} = useGetPost();
+  const {response, fetch} = useGetPostById();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -21,10 +21,14 @@ export default function DashboardDeletePost({isOpen, toggle, id, reload}) {
   });
 
   useEffect(() => {
-    if (response.data) {
+    fetch(id);
+  }, [id]);
+
+  useEffect(() => {
+    if (response) {
       setFormData({
-        title: response.data.title,
-        message: response.data.message,
+        title: response.title,
+        message: response.message,
       });
     }
   }, [response]);
