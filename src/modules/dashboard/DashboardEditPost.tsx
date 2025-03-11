@@ -1,25 +1,36 @@
-import React, {useState, useEffect} from 'react';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-} from 'reactstrap';
+import React, {useEffect} from 'react';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditPost, useGetPostById} from '@modules/dashboard/';
+import {useForm, SubmitHandler} from 'react-hook-form';
+
+interface PostInput {
+  title: string;
+  message: string;
+}
 
 export default function DashboardEditPost({isOpen, toggle, id, reload}) {
   const {put, error} = useEditPost();
   const {fetch, response} = useGetPostById();
 
-  const [formData, setFormData] = useState({
-    title: '',
-    message: '',
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm<PostInput>({
+    defaultValues: {
+      title: '',
+      message: '',
+    },
   });
+
+  const onSubmit: SubmitHandler<PostInput> = async (data) => {
+    await put(data, id);
+    if (!error) {
+      reload();
+      toggle();
+    }
+  };
 
   useEffect(() => {
     fetch(id);
@@ -27,37 +38,21 @@ export default function DashboardEditPost({isOpen, toggle, id, reload}) {
 
   useEffect(() => {
     if (response) {
-      setFormData({
-        title: response.title,
-        message: response.message,
-      });
+      const {title, message} = response;
+      const defaultValues = {
+        title,
+        message,
+      };
+      reset(defaultValues);
     }
   }, [response]);
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!formData.title || !formData.message) {
-      alert('Please fill out all fields');
-      return;
-    }
-
-    put(formData, id);
-    if (!error) {
-      reload();
-      toggle();
-    }
-  };
-
   const handleClose = () => {
+    const defaultValues = {
+      title: response?.title,
+      message: response?.message,
+    };
+    reset(defaultValues);
     toggle();
   };
 
@@ -65,40 +60,55 @@ export default function DashboardEditPost({isOpen, toggle, id, reload}) {
     <Modal isOpen={isOpen} centered>
       <ModalHeader>Edit Post</ModalHeader>
       <ModalBody>
-        <Form>
-          <FormGroup>
-            <Label for="title" className="fw-bold">
+        <form>
+          <div className="mb-3">
+            <label htmlFor="title" className="form-label fw-bold">
               Title <span className="text-danger">*</span>
-            </Label>
-            <Input
+            </label>
+            <input
               type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
+              className="form-control mb-2"
+              id="title"
+              {...register('title', {required: true})}
             />
-          </FormGroup>
+            {errors.title && (
+              <span className="text-danger fst-italic">
+                This field is required.
+              </span>
+            )}
+          </div>
 
-          <FormGroup>
-            <Label for="message" className="fw-bold">
+          <div className="mb-3">
+            <label htmlFor="message" className="form-label fw-bold">
               Message <span className="text-danger">*</span>
-            </Label>
-            <Input
+            </label>
+            <input
               type="text"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
+              className="form-control mb-2"
+              id="message"
+              {...register('message', {required: true})}
             />
-          </FormGroup>
-        </Form>
+            {errors.message && (
+              <span className="text-danger fst-italic">
+                This field is required.
+              </span>
+            )}
+          </div>
+
+          <ModalFooter>
+            <Button
+              color="primary"
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Submit
+            </Button>
+            <Button color="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalBody>
-      <ModalFooter>
-        <Button color="primary" type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
-        <Button color="secondary" onClick={handleClose}>
-          Cancel
-        </Button>
-      </ModalFooter>
     </Modal>
   );
 }

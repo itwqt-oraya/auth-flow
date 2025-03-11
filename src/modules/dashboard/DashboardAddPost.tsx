@@ -1,47 +1,24 @@
-import React, {useState, useContext} from 'react';
-import {AuthContext} from '@context/AuthContext';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-} from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 import {useAddPost} from '@modules/dashboard/';
+import {useForm, SubmitHandler} from 'react-hook-form';
+
+interface PostInput {
+  title: string;
+  message: string;
+}
 
 export default function DashboardAddPost({isOpen, toggle, reload}) {
   const {loading, error, post} = useAddPost();
 
-  const [formData, setFormData] = useState({
-    title: '',
-    message: '',
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm<PostInput>();
 
-  const handleChange = (e) => {
-    const {name, value} = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    if (!formData.title || !formData.message) {
-      alert('Please fill out all fields');
-      return;
-    }
-
-    e.preventDefault();
-    // form crud login sign
-    // api call: isloading, onsubmit
-    // https://github.com/QualityTrade/iaf-frontend-datacontributor/blob/main/src/views/certification-bodies/v2/view/cb-standards/view/key-locations/assign/index.js#L16
-    await post(formData);
+  const onSubmit: SubmitHandler<PostInput> = async (data) => {
+    await post(data);
     if (!error) {
       reload();
       toggle();
@@ -61,42 +38,55 @@ export default function DashboardAddPost({isOpen, toggle, reload}) {
       <ModalHeader>Create Post</ModalHeader>
       <ModalBody>
         {/* serialize */}
-        <Form>
-          <FormGroup>
-            <Label for="title" className="fw-bold">
+        <form>
+          <div className="mb-3">
+            <label htmlFor="title" className="form-label fw-bold">
               Title <span className="text-danger">*</span>
-            </Label>
-            <Input
+            </label>
+            <input
               type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
+              className="form-control mb-2"
+              id="title"
+              {...register('title', {required: true})}
             />
-            <FormText>Add a nice title.</FormText>
-          </FormGroup>
+            {errors.title && (
+              <span className="text-danger fst-italic">
+                This field is required.
+              </span>
+            )}
+          </div>
 
-          <FormGroup>
-            <Label for="message" className="fw-bold">
+          <div className="mb-3">
+            <label htmlFor="message" className="form-label fw-bold">
               Message <span className="text-danger">*</span>
-            </Label>
-            <Input
+            </label>
+            <input
               type="text"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
+              className="form-control mb-2"
+              id="message"
+              {...register('message', {required: true})}
             />
-            <FormText>And then a message to go with it!</FormText>
-          </FormGroup>
-        </Form>
+            {errors.message && (
+              <span className="text-danger fst-italic">
+                This field is required.
+              </span>
+            )}
+          </div>
+
+          <ModalFooter>
+            <Button
+              color="primary"
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Submit
+            </Button>
+            <Button color="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalBody>
-      <ModalFooter>
-        <Button color="primary" type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
-        <Button color="secondary" onClick={handleClose}>
-          Cancel
-        </Button>
-      </ModalFooter>
     </Modal>
   );
 }
