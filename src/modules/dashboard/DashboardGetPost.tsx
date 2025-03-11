@@ -1,11 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {getPosts} from '@api/dashboard';
-import {getCookie} from '@utils/cookie';
 import {AuthContext} from '@context/AuthContext';
 import {transformDate} from '@utils/date';
 import {Table, Button} from 'reactstrap';
 import {Link, useLocation} from 'react-router';
-
+import {useGetPost} from '@modules/dashboard/';
 // Modals
 import {
   DashboardAddPost,
@@ -14,8 +13,7 @@ import {
 } from '@modules/dashboard';
 
 export default function DashboardGetPost() {
-  const {handleStatusCode, reload} = useContext(AuthContext);
-  const token = getCookie('token');
+  const {response, loading, error, reload} = useGetPost();
   const [posts, setPosts] = useState([]);
 
   // Modal State
@@ -28,25 +26,34 @@ export default function DashboardGetPost() {
   const [postId, setPostId] = useState('');
 
   useEffect(() => {
-    getPosts(token).then((res) => {
-      handleStatusCode(res.status);
-      setPosts(res.data.data);
-    });
-  }, [token, handleStatusCode, reload]);
+    if (response.data) {
+      setPosts(response.data);
+    }
+  }, [response]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <section>
       {/* Render here the modals */}
-      <DashboardAddPost isOpen={isAddOpen} toggle={toggleAddModal} />
+      <DashboardAddPost
+        isOpen={isAddOpen}
+        toggle={toggleAddModal}
+        reload={reload}
+      />
       <DashboardEditPost
         isOpen={isEditOpen}
         toggle={toggleEditModal}
         id={postId}
+        reload={reload}
       />
       <DashboardDeletePost
         isOpen={isDeleteOpen}
         toggle={toggleDeleteModal}
         id={postId}
+        reload={reload}
       />
 
       <div className="d-flex align-items-center justify-content-between">
@@ -62,45 +69,45 @@ export default function DashboardGetPost() {
       </div>
 
       <div className="row d-flex justify-content-around gap-2 p-2">
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error.message}</p>}
         {posts.map((post, index) => (
-          <>
-            <div
-              className="col-sm d-flex flex-column justify-content-between p-3 border rounded"
-              key={index}
-            >
-              <div>
-                <h5>{post.title}</h5>
-                <p className="text-muted">{post.message}</p>
-              </div>
-              <p className="text-muted">{transformDate(post.createdAt)}</p>
-
-              <div className="d-flex gap-2">
-                <Button
-                  outline
-                  color="primary"
-                  size="sm"
-                  onClick={() => {
-                    toggleEditModal();
-                    setPostId(post.postId);
-                  }}
-                >
-                  Edit
-                </Button>
-
-                <Button
-                  outline
-                  color="danger"
-                  size="sm"
-                  onClick={() => {
-                    toggleDeleteModal();
-                    setPostId(post.postId);
-                  }}
-                >
-                  Delete
-                </Button>
-              </div>
+          <div
+            className="col-sm d-flex flex-column justify-content-between p-3 border rounded"
+            key={index}
+          >
+            <div>
+              <h5>{post.title}</h5>
+              <p className="text-muted">{post.message}</p>
             </div>
-          </>
+            <p className="text-muted">{transformDate(post.createdAt)}</p>
+
+            <div className="d-flex gap-2">
+              <Button
+                outline
+                color="primary"
+                size="sm"
+                onClick={() => {
+                  toggleEditModal();
+                  setPostId(post.postId);
+                }}
+              >
+                Edit
+              </Button>
+
+              <Button
+                outline
+                color="danger"
+                size="sm"
+                onClick={() => {
+                  toggleDeleteModal();
+                  setPostId(post.postId);
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
         ))}
       </div>
 

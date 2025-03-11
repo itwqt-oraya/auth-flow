@@ -1,5 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {AuthContext} from '@context/AuthContext';
+import React, {useState, useEffect} from 'react';
 import {
   Button,
   Modal,
@@ -10,30 +9,32 @@ import {
   FormGroup,
   Label,
 } from 'reactstrap';
-import {getPost, deletePost} from '@api/dashboard';
-import {getCookie} from '@utils/cookie';
+import {useDeletePost, useGetPost} from '@modules/dashboard/';
 
-export default function DashboardDeletePost({isOpen, toggle, id}) {
-  const {handleStatusCode, triggerReload} = useContext(AuthContext);
-  const token = getCookie('token');
-
-  useEffect(() => {
-    getPost(id, token).then((res) => {
-      setFormData({title: res.data.title, message: res.data.message});
-    });
-  }, [id, token]);
+export default function DashboardDeletePost({isOpen, toggle, id, reload}) {
+  const {error, deleteApi} = useDeletePost();
+  const {response} = useGetPost();
 
   const [formData, setFormData] = useState({
     title: '',
     message: '',
   });
 
+  useEffect(() => {
+    if (response.data) {
+      setFormData({
+        title: response.data.title,
+        message: response.data.message,
+      });
+    }
+  }, [response]);
+
   const handleSubmit = () => {
-    deletePost(id, token).then((res) => {
-      handleStatusCode(res.status);
-      triggerReload();
+    deleteApi(id);
+    if (!error) {
+      reload();
       toggle();
-    });
+    }
   };
 
   const handleClose = () => {

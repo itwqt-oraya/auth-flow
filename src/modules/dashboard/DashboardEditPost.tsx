@@ -13,21 +13,24 @@ import {
 } from 'reactstrap';
 import {getPost, updatePost} from '@api/dashboard';
 import {getCookie} from '@utils/cookie';
+import {useEditPost, useGetPost} from '@modules/dashboard/';
 
-export default function DashboardEditPost({isOpen, toggle, id}) {
-  const {handleStatusCode, triggerReload} = useContext(AuthContext);
-  const token = getCookie('token');
-
-  useEffect(() => {
-    getPost(id, token).then((res) => {
-      setFormData({title: res.data.title, message: res.data.message});
-    });
-  }, [id, token]);
-
+export default function DashboardEditPost({isOpen, toggle, id, reload}) {
+  const {put, error} = useEditPost();
+  const {response} = useGetPost();
   const [formData, setFormData] = useState({
     title: '',
     message: '',
   });
+
+  useEffect(() => {
+    if (response.data) {
+      setFormData({
+        title: response.data.title,
+        message: response.data.message,
+      });
+    }
+  }, [response]);
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -45,11 +48,11 @@ export default function DashboardEditPost({isOpen, toggle, id}) {
       return;
     }
 
-    updatePost(id, formData, token).then((res) => {
-      handleStatusCode(res.status);
-      triggerReload();
+    put(formData, id);
+    if (!error) {
+      reload();
       toggle();
-    });
+    }
   };
 
   const handleClose = () => {

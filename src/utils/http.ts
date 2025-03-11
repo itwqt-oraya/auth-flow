@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {getCookie} from '@utils/cookie';
 
 // if token -> add auth header
 export const http = (
@@ -14,7 +13,7 @@ export const http = (
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      Authorization: `Bearer ${token}`,
+      ...(token && {Authorization: `Bearer ${token}`}),
     },
   });
 
@@ -29,6 +28,12 @@ export const http = (
     .catch((error) => {
       // status code here -> window location redirect
       console.log(error);
+      // if response it has: data.message, status
+      const status = error.status;
+      const message = error.message;
+      const code = error.code;
+
+      // something
       throw error;
     });
 };

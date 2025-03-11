@@ -12,14 +12,11 @@ import {
   Input,
   FormText,
 } from 'reactstrap';
-import {createPost} from '@api/dashboard';
-import {useNavigate} from 'react-router';
-import {getCookie} from '@utils/cookie';
 
-export default function DashboardAddPost({isOpen, toggle}) {
-  const {handleStatusCode, triggerReload} = useContext(AuthContext);
-  const token = getCookie('token');
-  const nav = useNavigate();
+import {useAddPost} from '@modules/dashboard/';
+
+export default function DashboardAddPost({isOpen, toggle, reload}) {
+  const {loading, error, post} = useAddPost();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -34,7 +31,7 @@ export default function DashboardAddPost({isOpen, toggle}) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (!formData.title || !formData.message) {
       alert('Please fill out all fields');
       return;
@@ -44,16 +41,20 @@ export default function DashboardAddPost({isOpen, toggle}) {
     // form crud login sign
     // api call: isloading, onsubmit
     // https://github.com/QualityTrade/iaf-frontend-datacontributor/blob/main/src/views/certification-bodies/v2/view/cb-standards/view/key-locations/assign/index.js#L16
-    createPost(formData, token).then((res) => {
-      handleStatusCode(res.status);
-      triggerReload();
+    await post(formData);
+    if (!error) {
+      reload();
       toggle();
-    });
+    }
   };
 
   const handleClose = () => {
     toggle();
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Modal isOpen={isOpen} centered>
