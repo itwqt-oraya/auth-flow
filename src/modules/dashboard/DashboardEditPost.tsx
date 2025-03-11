@@ -11,15 +11,12 @@ import {
   Label,
   Input,
 } from 'reactstrap';
-import {useNavigate, useParams} from 'react-router';
 import {getPost, updatePost} from '@api/dashboard';
 import {getCookie} from '@utils/cookie';
 
-export default function DashboardEditPost() {
-  const {id} = useParams();
+export default function DashboardEditPost({isOpen, toggle, id}) {
   const {handleStatusCode, triggerReload} = useContext(AuthContext);
   const token = getCookie('token');
-  const nav = useNavigate();
 
   useEffect(() => {
     getPost(id, token).then((res) => {
@@ -51,16 +48,16 @@ export default function DashboardEditPost() {
     updatePost(id, formData, token).then((res) => {
       handleStatusCode(res.status);
       triggerReload();
-      nav(-1);
+      toggle();
     });
   };
 
   const handleClose = () => {
-    nav(-1);
+    toggle();
   };
 
   return (
-    <Modal isOpen={true} centered>
+    <Modal isOpen={isOpen} centered>
       <ModalHeader>Edit Post</ModalHeader>
       <ModalBody>
         <Form>

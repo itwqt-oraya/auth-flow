@@ -6,11 +6,26 @@ import {transformDate} from '@utils/date';
 import {Table, Button} from 'reactstrap';
 import {Link, useLocation} from 'react-router';
 
+// Modals
+import {
+  DashboardAddPost,
+  DashboardEditPost,
+  DashboardDeletePost,
+} from '@modules/dashboard';
+
 export default function DashboardGetPost() {
   const {handleStatusCode, reload} = useContext(AuthContext);
   const token = getCookie('token');
-  const location = useLocation();
   const [posts, setPosts] = useState([]);
+
+  // Modal State
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const toggleAddModal = () => setIsAddOpen(!isAddOpen);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const toggleEditModal = () => setIsEditOpen(!isEditOpen);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const toggleDeleteModal = () => setIsDeleteOpen(!isDeleteOpen);
+  const [postId, setPostId] = useState('');
 
   useEffect(() => {
     getPosts(token).then((res) => {
@@ -21,17 +36,29 @@ export default function DashboardGetPost() {
 
   return (
     <section>
+      {/* Render here the modals */}
+      <DashboardAddPost isOpen={isAddOpen} toggle={toggleAddModal} />
+      <DashboardEditPost
+        isOpen={isEditOpen}
+        toggle={toggleEditModal}
+        id={postId}
+      />
+      <DashboardDeletePost
+        isOpen={isDeleteOpen}
+        toggle={toggleDeleteModal}
+        id={postId}
+      />
+
       <div className="d-flex align-items-center justify-content-between">
         <h3>Posts</h3>
-        <Link
-          to="/dashboard/post"
-          state={{background: location}}
-          className="text-decoration-none"
+        <Button
+          outline
+          color="primary"
+          className="mb-3"
+          onClick={toggleAddModal}
         >
-          <Button outline color="primary" className="mb-3">
-            Create Post
-          </Button>
-        </Link>
+          Create Post
+        </Button>
       </div>
 
       <div className="row d-flex justify-content-around gap-2 p-2">
@@ -48,22 +75,29 @@ export default function DashboardGetPost() {
               <p className="text-muted">{transformDate(post.createdAt)}</p>
 
               <div className="d-flex gap-2">
-                <Link
-                  to={`/dashboard/post/edit/${post.postId}`}
-                  state={{background: location}}
+                <Button
+                  outline
+                  color="primary"
+                  size="sm"
+                  onClick={() => {
+                    toggleEditModal();
+                    setPostId(post.postId);
+                  }}
                 >
-                  <Button outline color="primary" size="sm">
-                    Edit
-                  </Button>
-                </Link>
-                <Link
-                  to={`/dashboard/post/delete/${post.postId}`}
-                  state={{background: location}}
+                  Edit
+                </Button>
+
+                <Button
+                  outline
+                  color="danger"
+                  size="sm"
+                  onClick={() => {
+                    toggleDeleteModal();
+                    setPostId(post.postId);
+                  }}
                 >
-                  <Button outline color="danger" size="sm">
-                    Delete
-                  </Button>
-                </Link>
+                  Delete
+                </Button>
               </div>
             </div>
           </>

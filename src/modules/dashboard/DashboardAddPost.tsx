@@ -16,7 +16,7 @@ import {createPost} from '@api/dashboard';
 import {useNavigate} from 'react-router';
 import {getCookie} from '@utils/cookie';
 
-export default function DashboardAddPost() {
+export default function DashboardAddPost({isOpen, toggle}) {
   const {handleStatusCode, triggerReload} = useContext(AuthContext);
   const token = getCookie('token');
   const nav = useNavigate();
@@ -47,16 +47,16 @@ export default function DashboardAddPost() {
     createPost(formData, token).then((res) => {
       handleStatusCode(res.status);
       triggerReload();
-      nav(-1);
+      toggle();
     });
   };
 
   const handleClose = () => {
-    nav(-1);
+    toggle();
   };
 
   return (
-    <Modal isOpen={true} centered>
+    <Modal isOpen={isOpen} centered>
       <ModalHeader>Create Post</ModalHeader>
       <ModalBody>
         {/* serialize */}

@@ -15,11 +15,10 @@ import {useNavigate} from 'react-router';
 import {password} from '@api/user';
 import {getCookie} from '@utils/cookie';
 
-export default function DashboardPassword() {
+export default function DashboardPassword({isOpen, toggle}) {
   const {user, handleStatusCode, updateUser, triggerReload} =
     useContext(AuthContext);
   const token = getCookie('token');
-  const nav = useNavigate();
 
   const [formData, setFormData] = useState({
     oldPassword: '',
@@ -64,16 +63,16 @@ export default function DashboardPassword() {
       updateUser(res);
       handleStatusCode(res.status);
       triggerReload();
-      nav(-1);
+      toggle();
     });
   };
 
   const handleClose = () => {
-    nav(-1);
+    toggle();
   };
 
   return (
-    <Modal isOpen={true} centered>
+    <Modal isOpen={isOpen} centered>
       <ModalHeader>Change Password</ModalHeader>
       <ModalBody>
         <Form>

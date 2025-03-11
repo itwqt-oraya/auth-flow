@@ -15,11 +15,10 @@ import {useNavigate} from 'react-router';
 import {details} from '@api/user';
 import {getCookie} from '@utils/cookie';
 
-export default function DashboardDetails() {
+export default function DashboardDetails({isOpen, toggle}) {
   const {user, handleStatusCode, updateUser, triggerReload} =
     useContext(AuthContext);
   const token = getCookie('token');
-  const nav = useNavigate();
 
   const [formData, setFormData] = useState({
     firstName: user.firstName,
@@ -40,16 +39,16 @@ export default function DashboardDetails() {
       updateUser(res);
       handleStatusCode(res.status);
       triggerReload();
-      nav(-1);
+      toggle();
     });
   };
 
   const handleClose = () => {
-    nav(-1);
+    toggle();
   };
 
   return (
-    <Modal isOpen={true} centered>
+    <Modal isOpen={isOpen} centered>
       <ModalHeader>Edit User</ModalHeader>
       <ModalBody>
         <Form>
