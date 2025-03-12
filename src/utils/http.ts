@@ -27,12 +27,14 @@ export const http = (
     })
     .catch((error) => {
       // status code here -> window location redirect
-      console.log(error);
       // if response it has: data.message, status
       const status = error.status;
       const message = error.message;
       const code = error.code;
 
+      console.log('status', status);
+      console.log('message', message);
+      console.log('code', code);
       // something
       throw error;
     });

@@ -49,7 +49,7 @@ export default function LoginForm() {
       </div>
 
       <div className="mb-3">
-        <label htmlFor="password" className="form-label fw-sembibold">
+        <label htmlFor="password" className="form-label fw-semibold">
           Password <span className="text-danger">*</span>
         </label>
         <input

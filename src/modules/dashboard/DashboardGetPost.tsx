@@ -1,9 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {getPosts} from '@api/dashboard';
-import {AuthContext} from '@context/AuthContext';
+import React, {useEffect, useState} from 'react';
 import {transformDate} from '@utils/date';
-import {Table, Button} from 'reactstrap';
-import {Link, useLocation} from 'react-router';
+import {Button} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
 // Modals
 import {
@@ -36,8 +33,7 @@ export default function DashboardGetPost() {
   }
 
   return (
-    <section>
-      {/* Render here the modals */}
+    <section className="w-100 d-flex flex-column justify-content-around">
       <DashboardAddPost
         isOpen={isAddOpen}
         toggle={toggleAddModal}
@@ -58,7 +54,7 @@ export default function DashboardGetPost() {
 
       <div className="d-flex align-items-center justify-content-between">
         <div>
-          <h6 className="mb-0">Posts</h6>
+          <h6 className="mb-0 fw-semibold">Posts</h6>
           <p className="text-muted">Your posts are displayed here.</p>
         </div>
         <Button outline color="dark" className="mb-3" onClick={toggleAddModal}>
@@ -66,7 +62,7 @@ export default function DashboardGetPost() {
         </Button>
       </div>
 
-      <div className="row d-flex justify-content-around gap-2 p-2">
+      <div className="w-100 mx-auto row gap-2">
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error.message}</p>}
         {posts.map((post, index) => (
@@ -75,12 +71,11 @@ export default function DashboardGetPost() {
             key={index}
           >
             <div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p className="mb-0 fw-bold">{post.title}</p>
-                <p className="mb-0 text-muted">
-                  {transformDate(post.updatedAt)}
-                </p>
-              </div>
+              <p className="mb-0 fw-bold text-break">{post.title}</p>
+              <p className="mb-0 fst-italic text-muted">
+                {transformDate(post.updatedAt)}
+              </p>
+
               <p className="text-muted text-break">{post.message}</p>
             </div>
 

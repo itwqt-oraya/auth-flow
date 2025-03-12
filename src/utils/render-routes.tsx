@@ -1,6 +1,12 @@
+import React, {Suspense} from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router';
 
+// lazy load routes
+// move auth here
 const renderRoutes = (webRoutes) => {
+  // use auth here
+  // in routes
+  // isPrivate
   return (
     <BrowserRouter>
       <Routes>
@@ -11,14 +17,22 @@ const renderRoutes = (webRoutes) => {
               <Route
                 key={item.path}
                 path={item.path}
-                element={item.element && <item.layout />}
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    {item.element && <item.layout />}
+                  </Suspense>
+                }
               >
                 <Route index element={item.element} />
                 {item.children?.map((child, index) => (
                   <Route
                     key={index}
                     path={child.path}
-                    element={child.element}
+                    element={
+                      <Suspense fallback={<div>Loading...</div>}>
+                        {child.element}
+                      </Suspense>
+                    }
                   />
                 ))}
               </Route>

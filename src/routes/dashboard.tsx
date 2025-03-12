@@ -1,17 +1,16 @@
+import React, {lazy} from 'react';
 // Layout
 import {PrivateLayout} from '@components/Layout';
 
 // Pages
-import Dashboard from '@pages/Dashboard';
+const Dashboard = lazy(() => import('@pages/Dashboard'));
 
 // Dashboard Module Modals
-import {
-  DashboardAddPost,
-  DashboardEditPost,
-  DashboardDeletePost,
-  DashboardDetails,
-  DashboardPassword,
-} from '@modules/dashboard';
+const DashboardAddPost = lazy(() => import('@modules/dashboard/'));
+const DashboardEditPost = lazy(() => import('@modules/dashboard/'));
+const DashboardDeletePost = lazy(() => import('@modules/dashboard/'));
+const DashboardDetails = lazy(() => import('@modules/dashboard/'));
+const DashboardPassword = lazy(() => import('@modules/dashboard/'));
 
 const dashboard = {
   path: '/dashboard',
