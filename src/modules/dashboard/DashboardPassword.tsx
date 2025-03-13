@@ -8,13 +8,12 @@ interface PasswordInput {
   confirmPassword: string;
 }
 
-export default function DashboardPassword({
-  isOpen,
-  toggle,
-}: {
-  isOpen: boolean;
+interface UserPassword {
+  isOpen?: boolean;
   toggle: () => void;
-}) {
+}
+
+export default function DashboardPassword({isOpen, toggle}: UserPassword) {
   const {loading, changePassword} = useChangePassword();
 
   const {

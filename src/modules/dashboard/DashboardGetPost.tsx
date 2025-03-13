@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {transformDate} from '@utils/date';
 import {Button, Spinner} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
@@ -9,9 +9,17 @@ import {
   DashboardDeletePost,
 } from '@modules/dashboard';
 
+interface Post {
+  postId: string;
+  title: string;
+  updatedAt: string;
+  message: string;
+}
+
 export default function DashboardGetPost() {
   const {response, loading, error, reload} = useGetPost();
-  const [posts, setPosts] = useState([]);
+
+  const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
     if (response.data && !loading) {

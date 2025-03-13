@@ -11,17 +11,19 @@ import {
 import {useDeletePost, useGetPostById} from '@modules/dashboard/';
 import {CiWarning} from 'react-icons/ci';
 
+interface DeletePost {
+  isOpen?: boolean;
+  toggle?: () => void;
+  id?: string;
+  reload?: () => void;
+}
+
 export default function DashboardDeletePost({
   isOpen,
   toggle,
   id,
   reload,
-}: {
-  isOpen: boolean;
-  toggle: () => void;
-  id: string;
-  reload: () => void;
-}) {
+}: DeletePost) {
   const {error, deleteApi} = useDeletePost();
   const {response, fetch} = useGetPostById();
 

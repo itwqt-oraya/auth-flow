@@ -46,7 +46,7 @@ const dashboard = {
     },
     {
       path: 'password',
-      element: <DashboardPassword />,
+      element: <DashboardPassword toggle={() => ''} />,
     },
   ],
 };

@@ -26,6 +26,7 @@ export const http = (
       return response;
     })
     .catch((error) => {
+      console.log(error);
       // status code here -> window location redirect
       // if response it has: data.message, status
       const status = error.status;

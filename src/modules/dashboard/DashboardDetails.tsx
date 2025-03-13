@@ -9,13 +9,11 @@ interface UserInput {
   lastName: string;
 }
 
-export default function DashboardDetails({
-  isOpen,
-  toggle,
-}: {
-  isOpen: boolean;
-  toggle: () => void;
-}) {
+interface UserDetails {
+  isOpen?: boolean;
+  toggle?: () => void;
+}
+export default function DashboardDetails({isOpen, toggle}: UserDetails) {
   const {user} = useContext(AuthContext);
   const {putEdit} = useEditUser();
 

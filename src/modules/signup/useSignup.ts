@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {signup} from '@api/auth';
 import {useNavigate} from 'react-router';
 
@@ -17,12 +17,13 @@ export const useSignup = () => {
     setLoading(true);
     try {
       const res = await signup(data);
-      if (res.status === 200) {
-        if (res.data) {
-          return nav('/');
-        }
+      if (res) {
+        alert('Signup successful');
+        return nav('/');
+      } else {
+        alert('Signup failed');
+        return;
       }
-      return res;
     } catch (error) {
       console.error(error);
     } finally {

@@ -8,17 +8,19 @@ interface PostInput {
   message: string;
 }
 
+interface EdistPost {
+  isOpen?: boolean;
+  toggle?: () => void;
+  id?: string;
+  reload?: () => void;
+}
+
 export default function DashboardEditPost({
   isOpen,
   toggle,
   id,
   reload,
-}: {
-  isOpen: boolean;
-  toggle: () => void;
-  id: string;
-  reload: () => void;
-}) {
+}: EdistPost) {
   const {put, error} = useEditPost();
   const {fetch, response} = useGetPostById();
 

@@ -20,9 +20,14 @@ export const useLogin = () => {
       if (res) {
         loginUser(res.data.data);
         if (isAuthenticated) {
+          alert('Logged in successfully');
           return nav('/dashboard');
         }
+      } else {
+        alert('Error logging in. Please try again.');
+        return;
       }
+
       return res;
     } catch (error) {
       console.error(error);
