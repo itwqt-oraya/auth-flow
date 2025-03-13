@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {
   Button,
   Modal,
@@ -11,7 +11,17 @@ import {
 import {useDeletePost, useGetPostById} from '@modules/dashboard/';
 import {CiWarning} from 'react-icons/ci';
 
-export default function DashboardDeletePost({isOpen, toggle, id, reload}) {
+export default function DashboardDeletePost({
+  isOpen,
+  toggle,
+  id,
+  reload,
+}: {
+  isOpen: boolean;
+  toggle: () => void;
+  id: string;
+  reload: () => void;
+}) {
   const {error, deleteApi} = useDeletePost();
   const {response, fetch} = useGetPostById();
 

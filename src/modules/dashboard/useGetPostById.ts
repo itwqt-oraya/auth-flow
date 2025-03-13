@@ -10,7 +10,7 @@ export const useGetPostById = () => {
   const token = getCookie('token');
 
   // fetch data using api
-  const fetch = async (id) => {
+  const fetch = async (id: string) => {
     console.log('fetching');
     setLoading(true);
     try {

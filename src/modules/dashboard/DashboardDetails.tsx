@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import {AuthContext} from '@context/AuthContext';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditUser} from '@modules/dashboard/';
@@ -9,7 +9,13 @@ interface UserInput {
   lastName: string;
 }
 
-export default function DashboardDetails({isOpen, toggle}) {
+export default function DashboardDetails({
+  isOpen,
+  toggle,
+}: {
+  isOpen: boolean;
+  toggle: () => void;
+}) {
   const {user} = useContext(AuthContext);
   const {putEdit} = useEditUser();
 

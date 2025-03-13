@@ -1,10 +1,10 @@
-import React, {useContext, useEffect} from 'react';
+import {useContext, useEffect, ReactNode} from 'react';
 import {Navigate, useNavigate, Outlet} from 'react-router';
 import {Container} from 'reactstrap';
 import {Nav} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
 
-export default function PublicLayout({children}) {
+export default function PublicLayout({children}: {children: ReactNode}) {
   const {isAuthenticated, user} = useContext(AuthContext);
   const nav = useNavigate();
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {transformDate} from '@utils/date';
-import {Button, Spinner, Toast, ToastBody, ToastHeader} from 'reactstrap';
+import {Button, Spinner} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
 // Modals
 import {

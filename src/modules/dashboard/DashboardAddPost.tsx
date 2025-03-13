@@ -15,7 +15,15 @@ interface PostInput {
   message: string;
 }
 
-export default function DashboardAddPost({isOpen, toggle, reload}) {
+export default function DashboardAddPost({
+  isOpen,
+  toggle,
+  reload,
+}: {
+  isOpen: boolean;
+  toggle: () => void;
+  reload: () => void;
+}) {
   const {loading, error, post} = useAddPost();
 
   const {

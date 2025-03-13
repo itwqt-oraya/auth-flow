@@ -1,13 +1,18 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {password} from '@api/user';
 import {getCookie} from '../../utils/cookie';
+
+interface FormData {
+  password: string;
+  newPassword: string;
+}
 
 export const useChangePassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const token = getCookie('token');
 
-  async function changePassword(data) {
+  async function changePassword(data: FormData) {
     setLoading(true);
     try {
       const response = await password(data, token);

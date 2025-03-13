@@ -1,11 +1,48 @@
-import {createContext, useState, useEffect} from 'react';
+import {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import {getCookie, setCookie, deleteCookie} from '@utils/cookie';
 import {refresh} from '@api/auth';
 
-export const AuthContext = createContext();
+interface AuthContextProps {
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    userId: string;
+  };
+  setUser: Dispatch<
+    SetStateAction<{
+      firstName: string;
+      lastName: string;
+      email: string;
+      userId: string;
+    }>
+  >;
+  isAuthenticated: boolean;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  loginUser: (res: object) => void;
+  logoutUser: () => void;
+  refreshAuth: () => void;
+  reload: boolean;
+  triggerReload: () => void;
+}
 
-export function AuthProvider({children}) {
-  const [user, setUser] = useState({});
+export const AuthContext = createContext<AuthContextProps>();
+
+export function AuthProvider({children}: {children: ReactNode}) {
+  const [user, setUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    userId: '',
+  });
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -29,7 +66,12 @@ export function AuthProvider({children}) {
 
   // logout -> remove token from cookie
   const logoutUser = () => {
-    setUser({});
+    setUser({
+      firstName: '',
+      lastName: '',
+      email: '',
+      userId: '',
+    });
     setIsAuthenticated(false);
     deleteCookie('token');
     window.location.href = '/';

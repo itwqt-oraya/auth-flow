@@ -1,16 +1,26 @@
-import React, {lazy} from 'react';
+import {lazy} from 'react';
 // Layout
 import {PrivateLayout} from '@components/Layout';
 
 // Pages
-const Dashboard = lazy(() => import('@pages/Dashboard'));
+const Dashboard = lazy(() => import('@pages/dashboard'));
 
 // Dashboard Module Modals
-const DashboardAddPost = lazy(() => import('@modules/dashboard/'));
-const DashboardEditPost = lazy(() => import('@modules/dashboard/'));
-const DashboardDeletePost = lazy(() => import('@modules/dashboard/'));
-const DashboardDetails = lazy(() => import('@modules/dashboard/'));
-const DashboardPassword = lazy(() => import('@modules/dashboard/'));
+const DashboardAddPost = lazy(
+  () => import('@modules/dashboard/DashboardAddPost')
+);
+const DashboardEditPost = lazy(
+  () => import('@modules/dashboard/DashboardEditPost')
+);
+const DashboardDeletePost = lazy(
+  () => import('@modules/dashboard/DashboardDeletePost')
+);
+const DashboardDetails = lazy(
+  () => import('@modules/dashboard/DashboardDetails')
+);
+const DashboardPassword = lazy(
+  () => import('@modules/dashboard/DashboardPassword')
+);
 
 const dashboard = {
   path: '/dashboard',

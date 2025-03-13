@@ -2,6 +2,11 @@ import {useState} from 'react';
 import {createPost} from '@api/dashboard';
 import {getCookie} from '@utils/cookie';
 
+interface FormData {
+  title: string;
+  message: string;
+}
+
 export const useAddPost = () => {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
@@ -9,7 +14,7 @@ export const useAddPost = () => {
   const token = getCookie('token');
 
   // post data using api
-  async function post(formData) {
+  async function post(formData: FormData) {
     setLoading(true);
     try {
       const res = await createPost(formData, token);

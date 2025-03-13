@@ -5,7 +5,7 @@ export const http = (
   method: string = 'GET',
   url: string,
   data: any,
-  token: string
+  token?: string
 ) => {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,

@@ -11,6 +11,6 @@ export const signup = (data) => {
 };
 
 // GET for refresh token
-export const refresh = (token) => {
+export const refresh = (token: string) => {
   return http('GET', '/auth/refresh', null, token);
 };

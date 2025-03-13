@@ -1,10 +1,10 @@
-import React, {lazy} from 'react';
+import {lazy} from 'react';
 // Layout
 import {PublicLayout} from '@components/Layout';
 
 // Pages
-const Login = lazy(() => import('@pages/Login'));
-const Signup = lazy(() => import('@pages/Signup'));
+const Login = lazy(() => import('@pages/login'));
+const Signup = lazy(() => import('@pages/signup'));
 
 const user = {
   path: '/',

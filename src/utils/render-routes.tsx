@@ -1,11 +1,23 @@
-import React, {Suspense} from 'react';
+import {Suspense, ReactNode, ComponentType} from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router';
 
-export default function renderRoutes(webRoutes) {
+interface WebRouteProps {
+  [key: string]: {
+    path: string;
+    element: ReactNode;
+    layout?: ComponentType;
+    children?: Array<{
+      path: string;
+      element: ReactNode;
+    }>;
+  };
+}
+
+export default function renderRoutes(webRoutes: WebRouteProps) {
   return (
     <BrowserRouter>
       <Routes>
-        {webRoutes.map((route) => {
+        {Object.values(webRoutes).map((route) => {
           const arrayRoutes = Object.values(route);
           return arrayRoutes.map((item) => {
             return (

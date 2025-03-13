@@ -8,13 +8,19 @@ interface PostInput {
   message: string;
 }
 
-export default function DashboardEditPost({isOpen, toggle, id, reload}) {
+export default function DashboardEditPost({
+  isOpen,
+  toggle,
+  id,
+  reload,
+}: {
+  isOpen: boolean;
+  toggle: () => void;
+  id: string;
+  reload: () => void;
+}) {
   const {put, error} = useEditPost();
   const {fetch, response} = useGetPostById();
-  const [formData, setFormData] = useState({
-    title: '',
-    message: '',
-  });
 
   useEffect(() => {
     if (isOpen) {
@@ -40,8 +46,8 @@ export default function DashboardEditPost({isOpen, toggle, id, reload}) {
     formState: {errors},
   } = useForm<PostInput>({
     defaultValues: {
-      title: formData.title,
-      message: formData.message,
+      title: '',
+      message: '',
     },
   });
 

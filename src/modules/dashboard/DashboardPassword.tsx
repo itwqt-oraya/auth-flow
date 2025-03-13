@@ -8,8 +8,14 @@ interface PasswordInput {
   confirmPassword: string;
 }
 
-export default function DashboardPassword({isOpen, toggle}) {
-  const {loading, error, isToggle, changePassword} = useChangePassword();
+export default function DashboardPassword({
+  isOpen,
+  toggle,
+}: {
+  isOpen: boolean;
+  toggle: () => void;
+}) {
+  const {loading, changePassword} = useChangePassword();
 
   const {
     register,

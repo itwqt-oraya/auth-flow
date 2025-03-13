@@ -1,4 +1,3 @@
-import React from 'react';
 import {SignupForm} from '@modules/signup';
 export default function index() {
   return (
