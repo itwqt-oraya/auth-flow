@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditPost, useGetPostById} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -11,30 +11,16 @@ interface PostInput {
 export default function DashboardEditPost({isOpen, toggle, id, reload}) {
   const {put, error} = useEditPost();
   const {fetch, response} = useGetPostById();
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: {errors},
-  } = useForm<PostInput>({
-    defaultValues: {
-      title: '',
-      message: '',
-    },
+  const [formData, setFormData] = useState({
+    title: '',
+    message: '',
   });
 
-  const onSubmit: SubmitHandler<PostInput> = async (data) => {
-    await put(data, id);
-    if (!error) {
-      reload();
-      toggle();
-    }
-  };
-
   useEffect(() => {
-    fetch(id);
-  }, [id]);
+    if (isOpen) {
+      fetch(id);
+    }
+  }, [isOpen, id]);
 
   useEffect(() => {
     if (response) {
@@ -46,6 +32,26 @@ export default function DashboardEditPost({isOpen, toggle, id, reload}) {
       reset(defaultValues);
     }
   }, [response]);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm<PostInput>({
+    defaultValues: {
+      title: formData.title,
+      message: formData.message,
+    },
+  });
+
+  const onSubmit: SubmitHandler<PostInput> = async (data) => {
+    await put(data, id);
+    if (!error) {
+      reload();
+      toggle();
+    }
+  };
 
   const handleClose = () => {
     const defaultValues = {

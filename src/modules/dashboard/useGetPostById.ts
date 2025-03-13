@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import {getPost} from '@api/dashboard';
 import {getCookie} from '@utils/cookie';
@@ -11,6 +11,7 @@ export const useGetPostById = () => {
 
   // fetch data using api
   const fetch = async (id) => {
+    console.log('fetching');
     setLoading(true);
     try {
       const res = await getPost(id, token);

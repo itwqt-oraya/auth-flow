@@ -13,7 +13,9 @@ export const useDeletePost = () => {
     setLoading(true);
     try {
       const res = await deletePost(id, token);
-      setResponse(res.data);
+      if (res.status === 200) {
+        alert('Post deleted successfully');
+      }
     } catch (error) {
       setError(error);
     } finally {

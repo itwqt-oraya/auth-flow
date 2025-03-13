@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {transformDate} from '@utils/date';
-import {Button} from 'reactstrap';
+import {Button, Spinner, Toast, ToastBody, ToastHeader} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
 // Modals
 import {
@@ -13,6 +13,12 @@ export default function DashboardGetPost() {
   const {response, loading, error, reload} = useGetPost();
   const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    if (response.data && !loading) {
+      setPosts(response.data);
+    }
+  }, [response]);
+
   // Modal State
   const [isAddOpen, setIsAddOpen] = useState(false);
   const toggleAddModal = () => setIsAddOpen(!isAddOpen);
@@ -22,14 +28,12 @@ export default function DashboardGetPost() {
   const toggleDeleteModal = () => setIsDeleteOpen(!isDeleteOpen);
   const [postId, setPostId] = useState('');
 
-  useEffect(() => {
-    if (response.data) {
-      setPosts(response.data);
-    }
-  }, [response]);
-
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner color="dark" />
+      </div>
+    );
   }
 
   return (
@@ -62,12 +66,13 @@ export default function DashboardGetPost() {
         </Button>
       </div>
 
-      <div className="w-100 mx-auto row gap-2">
+      {error && <p>Oops. There must be an error. Try again.</p>}
+
+      <div className="container-fluid row row-cols-1 row-cols-md-3 g-2">
         {loading && <p>Loading...</p>}
-        {error && <p>Error: {error.message}</p>}
         {posts.map((post, index) => (
           <div
-            className="col-sm d-flex flex-column justify-content-between p-3 border rounded"
+            className="col d-flex flex-column justify-content-between p-3 border rounded"
             key={index}
           >
             <div>

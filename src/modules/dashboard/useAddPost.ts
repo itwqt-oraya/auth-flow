@@ -13,7 +13,10 @@ export const useAddPost = () => {
     setLoading(true);
     try {
       const res = await createPost(formData, token);
-      setResponse(res.data);
+      if (res.status === 200) {
+        setResponse(res.data);
+        alert('Post created successfully');
+      }
     } catch (error) {
       setError(error);
     } finally {

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Link} from 'react-router';
 import {
   Navbar,
@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-
 import {AuthContext} from '@context/AuthContext';
 
 import {DashboardPassword, DashboardDetails} from '@modules/dashboard';

@@ -13,6 +13,10 @@ export const useEditPost = () => {
     setLoading(true);
     try {
       const res = await updatePost(id, formData, token);
+      if (res.status === 200) {
+        setResponse(res.data);
+        alert('Post updated successfully');
+      }
       setResponse(res.data);
     } catch (error) {
       setError(error);

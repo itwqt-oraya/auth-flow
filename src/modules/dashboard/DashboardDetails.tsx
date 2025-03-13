@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {AuthContext} from '@context/AuthContext';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditUser} from '@modules/dashboard/';
@@ -11,7 +11,6 @@ interface UserInput {
 
 export default function DashboardDetails({isOpen, toggle}) {
   const {user} = useContext(AuthContext);
-
   const {putEdit} = useEditUser();
 
   const {
@@ -19,20 +18,7 @@ export default function DashboardDetails({isOpen, toggle}) {
     handleSubmit,
     reset,
     formState: {errors},
-  } = useForm<UserInput>({
-    defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-    },
-  });
-
-  useEffect(() => {
-    const defaultValues = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
-    reset(defaultValues);
-  }, [user]);
+  } = useForm<UserInput>();
 
   const onSubmit: SubmitHandler<UserInput> = async (data) => {
     await putEdit(data);
@@ -66,7 +52,8 @@ export default function DashboardDetails({isOpen, toggle}) {
               type="text"
               className="form-control"
               id="firstName"
-              {...(register('firstName'), {required: true})}
+              defaultValue={user.firstName}
+              {...register('firstName', {required: true})}
             />
             {errors.firstName && (
               <span className="text-danger">This field is required</span>
@@ -81,7 +68,8 @@ export default function DashboardDetails({isOpen, toggle}) {
               type="text"
               className="form-control"
               id="lastName"
-              {...(register('lastName'), {required: true})}
+              defaultValue={user.lastName}
+              {...register('lastName', {required: true})}
             />
             {errors.lastName && (
               <span className="text-danger">This field is required</span>

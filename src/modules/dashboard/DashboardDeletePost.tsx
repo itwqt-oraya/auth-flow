@@ -7,7 +7,6 @@ import {
   ModalFooter,
   Form,
   FormGroup,
-  Label,
 } from 'reactstrap';
 import {useDeletePost, useGetPostById} from '@modules/dashboard/';
 import {CiWarning} from 'react-icons/ci';

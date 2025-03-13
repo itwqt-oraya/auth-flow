@@ -16,17 +16,15 @@ export function AuthProvider({children}) {
   }, []);
 
   // login -> set token in cookie
-  const loginUser = (res, status) => {
+  const loginUser = (res) => {
     setUser({
-      firstName: res.data.firstName,
-      lastName: res.data.lastName,
-      email: res.data.email,
-      userId: res.data.userId,
+      firstName: res.firstName,
+      lastName: res.lastName,
+      email: res.email,
+      userId: res.userId,
     });
-    if (handleStatusCode(status)) {
-      setIsAuthenticated(true);
-      setCookie('token', res.data.token, 1);
-    }
+    setIsAuthenticated(true);
+    setCookie('token', res.token, 1);
   };
 
   // logout -> remove token from cookie
@@ -59,50 +57,11 @@ export function AuthProvider({children}) {
     }
   };
 
-  const updateUser = (res) => {
-    console.log(res);
-    setUser({
-      firstName: res.data.data.firstName,
-      lastName: res.data.data.lastName,
-      email: res.data.data.email,
-      userId: res.data.data.userId,
-    });
-    setIsAuthenticated(true);
-    setCookie('token', res.data.data.token, 1);
-  };
-
   const [reload, setReload] = useState(false);
 
   const triggerReload = () => {
     setReload(!reload);
   };
-
-  // handle status codes
-  // 200 -> login / signup / post / edit / delete
-  // 401 -> unauthorized
-  // 403 -> forbidden
-  // 404 -> not found
-  // move to http
-  function handleStatusCode(status) {
-    console.log('Status Code:', status);
-    switch (status) {
-      case 200:
-        console.log('Success');
-        return true;
-      case 401:
-        console.log('Unauthorized');
-        refreshAuth();
-        break;
-      case 403:
-        console.log('Forbidden');
-        break;
-      case 404:
-        console.log('Not Found');
-        break;
-      default:
-        console.log('Unknown Status Code');
-    }
-  }
 
   return (
     <AuthContext.Provider
@@ -114,10 +73,8 @@ export function AuthProvider({children}) {
         loginUser,
         logoutUser,
         refreshAuth,
-        handleStatusCode,
         reload,
         triggerReload,
-        updateUser,
       }}
     >
       {children}

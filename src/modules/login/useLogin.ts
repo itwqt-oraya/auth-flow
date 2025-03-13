@@ -12,8 +12,8 @@ export const useLogin = () => {
     setLoading(true);
     try {
       const res = await login(data);
-      if (res.status === 200) {
-        loginUser(res.data, res.status);
+      if (res) {
+        loginUser(res.data.data);
         if (isAuthenticated) {
           return nav('/dashboard');
         }

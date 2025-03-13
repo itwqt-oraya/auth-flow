@@ -1,12 +1,7 @@
 import React, {Suspense} from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router';
 
-// lazy load routes
-// move auth here
-const renderRoutes = (webRoutes) => {
-  // use auth here
-  // in routes
-  // isPrivate
+export default function renderRoutes(webRoutes) {
   return (
     <BrowserRouter>
       <Routes>
@@ -42,6 +37,4 @@ const renderRoutes = (webRoutes) => {
       </Routes>
     </BrowserRouter>
   );
-};
-
-export default renderRoutes;
+}

@@ -1,4 +1,11 @@
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Spinner,
+} from 'reactstrap';
 
 import {useAddPost} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -30,7 +37,11 @@ export default function DashboardAddPost({isOpen, toggle, reload}) {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner color="dark" />
+      </div>
+    );
   }
 
   return (
@@ -42,7 +53,6 @@ export default function DashboardAddPost({isOpen, toggle, reload}) {
         </div>
       </ModalHeader>
       <ModalBody>
-        {/* serialize */}
         <form>
           <div className="mb-3">
             <label htmlFor="title" className="form-label fw-semibold mb-1">

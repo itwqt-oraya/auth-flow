@@ -35,7 +35,5 @@ export const http = (
       console.log('status', status);
       console.log('message', message);
       console.log('code', code);
-      // something
-      throw error;
     });
 };

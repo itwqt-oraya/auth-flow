@@ -11,6 +11,9 @@ export const useChangePassword = () => {
     setLoading(true);
     try {
       const response = await password(data, token);
+      if (response.status === 200) {
+        alert('Password changed successfully');
+      }
       return response;
     } catch (error) {
       setError(error);
