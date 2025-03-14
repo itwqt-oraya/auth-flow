@@ -2,38 +2,32 @@ import {useState, useContext} from 'react';
 import {AuthContext} from '@context/AuthContext';
 import {login} from '@api/auth';
 import {useNavigate} from 'react-router';
-
-interface LoginData {
-  email: string;
-  password: string;
-}
+import {USER, LOGIN_PAYLOAD} from '@/models/user';
+import {AxiosError} from 'axios';
 
 export const useLogin = () => {
   const {loginUser, isAuthenticated} = useContext(AuthContext);
+  const [response, setResponse] = useState<USER | []>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const nav = useNavigate();
 
-  async function postLogin(data: LoginData) {
+  async function postLogin(data: LOGIN_PAYLOAD) {
     setLoading(true);
     try {
       const res = await login(data);
-      if (res && res.status === 200) {
-        loginUser(res.data.data);
-        if (isAuthenticated) {
-          alert('Logged in successfully');
-          return nav('/dashboard');
-        }
-      } else {
-        alert('Error logging in. Please try again.');
-        return;
-      }
-
-      return res;
+      setResponse(res);
+      // set user from response to context
+      // handle status code here
     } catch (error) {
-      console.error(error);
+      if (error instanceof AxiosError) {
+        const {message} = error;
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
   }
-  return {loading, postLogin};
+
+  return {response, loading, error, postLogin};
 };

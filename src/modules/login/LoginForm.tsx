@@ -1,11 +1,7 @@
 import {Button} from 'reactstrap';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {useLogin} from '@modules/login';
-
-interface LoginInput {
-  email: string;
-  password: string;
-}
+import {LOGIN_PAYLOAD} from '@/models/user';
 
 export default function LoginForm() {
   const {loading, postLogin} = useLogin();
@@ -14,14 +10,14 @@ export default function LoginForm() {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<LoginInput>({
+  } = useForm<LOGIN_PAYLOAD>({
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  const onSubmit: SubmitHandler<LoginInput> = async (data) => {
+  const onSubmit: SubmitHandler<LOGIN_PAYLOAD> = async (data) => {
     await postLogin(data);
   };
 

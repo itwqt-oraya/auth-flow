@@ -1,28 +1,17 @@
 import {http} from '@utils/http';
-
-interface LoginData {
-  email: string;
-  password: string;
-}
-
-interface SignupData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+import {USER, LOGIN_PAYLOAD, SIGNUP_PAYLOAD} from '@/models/user';
 
 // POST for login /login then store token in auth context
-export const login = (data: LoginData) => {
-  return http('POST', '/auth/login', data);
+export const login = (data: LOGIN_PAYLOAD) => {
+  return http<USER>('POST', '/auth/login', data);
 };
 
 // POST for signuo /user/signup
-export const signup = (data: SignupData) => {
-  return http('POST', '/user/signup', data);
+export const signup = (data: SIGNUP_PAYLOAD) => {
+  return http<SIGNUP_PAYLOAD>('POST', '/user/signup', data);
 };
 
 // GET for refresh token
-export const refresh = (token: string) => {
-  return http('GET', '/auth/refresh', null, token);
+export const refresh = () => {
+  return http('GET', '/auth/refresh', null);
 };

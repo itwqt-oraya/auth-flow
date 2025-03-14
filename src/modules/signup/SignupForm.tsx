@@ -1,14 +1,7 @@
 import {Button} from 'reactstrap';
 import {useForm, SubmitHandler} from 'react-hook-form';
-
 import {useSignup} from '@modules/signup';
-
-interface SignupInput {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+import {SIGNUP_PAYLOAD} from '@/models/user';
 
 export default function SignupForm() {
   const {loading, postSignup} = useSignup();
@@ -17,7 +10,7 @@ export default function SignupForm() {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<SignupInput>({
+  } = useForm<SIGNUP_PAYLOAD>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -26,7 +19,7 @@ export default function SignupForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<SignupInput> = async (data) => {
+  const onSubmit: SubmitHandler<SIGNUP_PAYLOAD> = async (data) => {
     await postSignup(data);
   };
 

@@ -1,34 +1,30 @@
 import {useState} from 'react';
 import {signup} from '@api/auth';
 import {useNavigate} from 'react-router';
-
-interface SignupInput {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+import {USER, SIGNUP_PAYLOAD} from '@/models/user';
+import {AxiosError} from 'axios';
 
 export const useSignup = () => {
+  const [response, setResponse] = useState<SIGNUP_PAYLOAD | []>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const nav = useNavigate();
 
-  async function postSignup(data: SignupInput) {
+  async function postSignup(data: SIGNUP_PAYLOAD) {
     setLoading(true);
     try {
       const res = await signup(data);
-      if (res && res.status === 200) {
-        alert('Signup successful');
-        return nav('/');
-      } else {
-        alert('Signup failed');
-        return;
-      }
+      setResponse(res);
+      // handle status code here
+      // handle redirect
     } catch (error) {
-      console.error(error);
+      if (error instanceof AxiosError) {
+        const {message} = error;
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
   }
-  return {loading, postSignup};
+  return {response, error, loading, postSignup};
 };

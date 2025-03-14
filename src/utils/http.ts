@@ -29,7 +29,7 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-// if token -> add auth header
+
 export const http = async <T = Record<string, unknown>>(
   method: string = 'GET',
   url: string,
