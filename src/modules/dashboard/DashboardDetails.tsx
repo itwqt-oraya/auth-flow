@@ -1,6 +1,13 @@
 import {useContext} from 'react';
 import {AuthContext} from '@context/AuthContext';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Spinner,
+} from 'reactstrap';
 import {useEditUser} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 
@@ -15,7 +22,7 @@ interface UserDetails {
 }
 export default function DashboardDetails({isOpen, toggle}: UserDetails) {
   const {user} = useContext(AuthContext);
-  const {putEdit} = useEditUser();
+  const {error, loading, putEdit} = useEditUser();
 
   const {
     register,
@@ -37,6 +44,22 @@ export default function DashboardDetails({isOpen, toggle}: UserDetails) {
     reset(defaultValues);
     toggle();
   };
+
+  if (loading) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner color="dark" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <h5 className="text-danger">{error}</h5>
+      </div>
+    );
+  }
 
   return (
     <Modal isOpen={isOpen} centered>

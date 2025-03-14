@@ -7,6 +7,7 @@ import {
   ModalFooter,
   Form,
   FormGroup,
+  Spinner,
 } from 'reactstrap';
 import {useDeletePost, useGetPostById} from '@modules/dashboard/';
 import {CiWarning} from 'react-icons/ci';
@@ -29,8 +30,12 @@ export default function DashboardDeletePost({
   id,
   reload,
 }: DeletePost) {
-  const {error, deleteApi} = useDeletePost();
-  const {response, fetch} = useGetPostById();
+  const {error, loading, deleteApi} = useDeletePost();
+  const {
+    response,
+    fetch,
+  }: {response: PostData | null; fetch: (id: string) => void} =
+    useGetPostById();
 
   const [formData, setFormData] = useState<PostData>({
     title: '',
@@ -62,6 +67,21 @@ export default function DashboardDeletePost({
     toggle();
   };
 
+  if (loading) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner color="dark" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <h5 className="text-danger">{error}</h5>
+      </div>
+    );
+  }
   return (
     <Modal isOpen={isOpen} centered>
       <ModalHeader tag={'h6'}>

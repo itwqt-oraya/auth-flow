@@ -50,6 +50,14 @@ export default function DashboardAddPost({isOpen, toggle, reload}: AddPost) {
     );
   }
 
+  if (error) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <h5 className="text-danger">{error}</h5>
+      </div>
+    );
+  }
+
   return (
     <Modal isOpen={isOpen} centered>
       <ModalHeader tag={'h6'}>

@@ -54,6 +54,14 @@ export default function DashboardGetPost() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <h5 className="text-danger">{error}</h5>
+      </div>
+    );
+  }
+
   return (
     <section className="w-100 d-flex flex-column justify-content-around">
       <DashboardAddPost

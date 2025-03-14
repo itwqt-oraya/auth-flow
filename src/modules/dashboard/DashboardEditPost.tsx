@@ -1,5 +1,12 @@
 import {useEffect} from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Spinner,
+} from 'reactstrap';
 import {useEditPost, useGetPostById} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 
@@ -21,7 +28,7 @@ export default function DashboardEditPost({
   id,
   reload,
 }: EdistPost) {
-  const {put, error} = useEditPost();
+  const {put, loading, error} = useEditPost();
   const {fetch, response} = useGetPostById();
 
   useEffect(() => {
@@ -69,6 +76,22 @@ export default function DashboardEditPost({
     reset(defaultValues);
     toggle();
   };
+
+  if (loading) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner color="dark" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <h5 className="text-danger">{error}</h5>
+      </div>
+    );
+  }
 
   return (
     <Modal isOpen={isOpen} centered>

@@ -1,4 +1,11 @@
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Spinner,
+} from 'reactstrap';
 import {useChangePassword} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 
@@ -14,7 +21,7 @@ interface UserPassword {
 }
 
 export default function DashboardPassword({isOpen, toggle}: UserPassword) {
-  const {loading, changePassword} = useChangePassword();
+  const {loading, error, changePassword} = useChangePassword();
 
   const {
     register,
@@ -50,7 +57,19 @@ export default function DashboardPassword({isOpen, toggle}: UserPassword) {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner color="dark" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <h5 className="text-danger">{error}</h5>
+      </div>
+    );
   }
 
   return (

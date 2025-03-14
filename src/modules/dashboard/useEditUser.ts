@@ -13,6 +13,7 @@ export const useEditUser = () => {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string>('');
   const token = getCookie('token');
 
   async function putEdit(formData: FormData) {
@@ -28,10 +29,11 @@ export const useEditUser = () => {
       triggerReload();
     } catch (error) {
       console.log(error);
+      setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
       setSuccess(true);
     }
   }
-  return {loading, putEdit, success};
+  return {loading, error, putEdit, success};
 };
