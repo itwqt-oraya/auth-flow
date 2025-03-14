@@ -1,32 +1,33 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 import {getPosts} from '@api/dashboard';
-import {getCookie} from '@utils/cookie';
+import {AxiosError} from 'axios';
+import {POST} from '@models/posts';
 
 export const useGetPost = () => {
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState<POST[] | []>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const token = getCookie('token');
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (token) {
-      fetch();
-    }
-  }, [token]);
-
-  // fetch data using api
-  const fetch = async () => {
+  const getData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getPosts(token);
-      setResponse(res.data);
+      const {data} = await getPosts();
+      setResponse(data);
     } catch (error) {
-      setError(error);
+      if (error instanceof AxiosError) {
+        const {message} = error;
+
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   return {
     response,

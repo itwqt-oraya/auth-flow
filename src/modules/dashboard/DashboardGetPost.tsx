@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {transformDate} from '@utils/date';
 import {Button, Spinner} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
+import {sampleFunction} from '@utils/http';
 // Modals
 import {
   DashboardAddPost,
@@ -18,6 +19,7 @@ interface Post {
 
 export default function DashboardGetPost() {
   const {response, loading, error, reload} = useGetPost();
+  sampleFunction(45);
 
   const [posts, setPosts] = useState<Post[]>([]);
 
