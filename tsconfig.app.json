@@ -31,7 +31,8 @@
       "@context/*": ["src/context/*"],
       "@modules/*": ["src/modules/*"],
       "@api/*": ["src/api/*"],
-      "@routes/*": ["src/routes/*"]
+      "@routes/*": ["src/routes/*"],
+      "@models/*": ["src/models/*"]
     }
   },
   "include": ["src"]

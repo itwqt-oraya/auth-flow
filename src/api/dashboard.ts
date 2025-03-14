@@ -1,13 +1,10 @@
 import {http} from '@utils/http';
-
-interface FormData {
-  title: string;
-  message: string;
-}
+import {POST, POST_PAYLOAD} from '@models/posts';
+import {LIST} from '@models/query';
 
 // GET /post list of post
-export const getPosts = (token: string) => {
-  return http('GET', '/post', null, token);
+export const getPosts = () => {
+  return http<LIST<POST>>('GET', '/post');
 };
 
 // GET /post/:id
@@ -17,13 +14,13 @@ export const getPost = (id: string, token: string) => {
 
 // POST /post create post
 // title , message
-export const createPost = (data: FormData, token: string) => {
-  return http('POST', '/post', data, token);
+export const createPost = (data: POST_PAYLOAD) => {
+  return http<{message: string}>('POST', '/post', data);
 };
 
 // PUT /post/:id update post
 // title , message
-export const updatePost = (id: string, data: FormData, token: string) => {
+export const updatePost = (id: string, data: POST_PAYLOAD, token: string) => {
   return http('PUT', `/post/${id}`, data, token);
 };
 
