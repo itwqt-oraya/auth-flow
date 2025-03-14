@@ -16,14 +16,24 @@ interface Post {
   message: string;
 }
 
+interface ApiResponse {
+  data: Post[];
+}
+
 export default function DashboardGetPost() {
   const {response, loading, error, reload} = useGetPost();
 
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    if (response.data && !loading) {
-      setPosts(response.data);
+    const handleResponse = (response: ApiResponse) => {
+      if (response && !loading) {
+        setPosts(response.data);
+      }
+    };
+
+    if (response && 'data' in response) {
+      handleResponse(response as ApiResponse);
     }
   }, [response]);
 

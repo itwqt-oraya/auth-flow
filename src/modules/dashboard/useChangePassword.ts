@@ -10,19 +10,21 @@ interface PasswordInput {
 
 export const useChangePassword = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
   const token = getCookie('token');
 
   async function changePassword(data: PasswordInput) {
     setLoading(true);
     try {
       const response = await password(data, token);
-      if (response.status === 200) {
-        alert('Password changed successfully');
+      if (response && response.status === 200) {
+        alert('Password changed succesfully');
+      } else {
+        alert('Error changing password');
       }
       return response;
     } catch (error) {
-      setError(error);
+      setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }

@@ -6,7 +6,7 @@ import {getCookie} from '@utils/cookie';
 export const useGetPost = () => {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>('');
   const token = getCookie('token');
 
   useEffect(() => {
@@ -20,9 +20,13 @@ export const useGetPost = () => {
     setLoading(true);
     try {
       const res = await getPosts(token);
-      setResponse(res.data);
+      if (res && res.status === 200) {
+        setResponse(res.data);
+      } else {
+        setResponse({});
+      }
     } catch (error) {
-      setError(error);
+      setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }

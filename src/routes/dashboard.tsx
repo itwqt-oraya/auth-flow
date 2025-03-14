@@ -30,19 +30,23 @@ const dashboard = {
   children: [
     {
       path: 'post',
-      element: <DashboardAddPost />,
+      element: <DashboardAddPost toggle={() => ''} reload={() => ''} />,
     },
     {
       path: 'post/edit/:id',
-      element: <DashboardEditPost />,
+      element: (
+        <DashboardEditPost toggle={() => ''} reload={() => ''} id={''} />
+      ),
     },
     {
       path: 'post/delete/:id',
-      element: <DashboardDeletePost />,
+      element: (
+        <DashboardDeletePost toggle={() => ''} reload={() => ''} id={''} />
+      ),
     },
     {
       path: 'details',
-      element: <DashboardDetails />,
+      element: <DashboardDetails toggle={() => ''} />,
     },
     {
       path: 'password',

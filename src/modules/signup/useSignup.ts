@@ -17,7 +17,7 @@ export const useSignup = () => {
     setLoading(true);
     try {
       const res = await signup(data);
-      if (res) {
+      if (res && res.status === 200) {
         alert('Signup successful');
         return nav('/');
       } else {

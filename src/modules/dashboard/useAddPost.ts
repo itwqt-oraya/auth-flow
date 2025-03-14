@@ -10,7 +10,7 @@ interface FormData {
 export const useAddPost = () => {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>('');
   const token = getCookie('token');
 
   // post data using api
@@ -18,12 +18,15 @@ export const useAddPost = () => {
     setLoading(true);
     try {
       const res = await createPost(formData, token);
-      if (res.status === 200) {
+      if (res && res.status === 200) {
         setResponse(res.data);
         alert('Post created successfully');
+      } else {
+        setResponse({});
+        alert('Error creating post data');
       }
     } catch (error) {
-      setError(error);
+      setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }

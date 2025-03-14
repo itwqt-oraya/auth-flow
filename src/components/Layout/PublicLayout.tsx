@@ -5,11 +5,12 @@ import {Nav} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
 
 export default function PublicLayout({children}: {children: ReactNode}) {
-  const {isAuthenticated, user} = useContext(AuthContext);
+  const {isAuthenticated, user, refreshAuth} = useContext(AuthContext);
   const nav = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated) {
+      refreshAuth();
       nav('/dashboard');
     } else {
       nav('/');

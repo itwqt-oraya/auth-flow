@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditPost, useGetPostById} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
@@ -10,9 +10,9 @@ interface PostInput {
 
 interface EdistPost {
   isOpen?: boolean;
-  toggle?: () => void;
-  id?: string;
-  reload?: () => void;
+  toggle: () => void;
+  id: string;
+  reload: () => void;
 }
 
 export default function DashboardEditPost({

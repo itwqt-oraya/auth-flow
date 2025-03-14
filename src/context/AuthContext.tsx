@@ -26,11 +26,32 @@ interface AuthContextProps {
   >;
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
-  loginUser: (res: object) => void;
+  loginUser: (res: LoginProps) => void;
   logoutUser: () => void;
   refreshAuth: () => void;
   reload: boolean;
   triggerReload: () => void;
+}
+
+interface ResponseProps {
+  status: number;
+  data: {
+    data: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      userId: string;
+      token: string;
+    };
+  };
+}
+
+interface LoginProps {
+  firstName: string;
+  lastName: string;
+  email: string;
+  userId: string;
+  token: string;
 }
 
 export const AuthContext = createContext<AuthContextProps>();
@@ -53,7 +74,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
   }, []);
 
   // login -> set token in cookie
-  const loginUser = (res) => {
+  const loginUser = (res: LoginProps) => {
     setUser({
       firstName: res.firstName,
       lastName: res.lastName,
@@ -82,17 +103,20 @@ export function AuthProvider({children}: {children: ReactNode}) {
     const token = getCookie('token');
     if (token && token !== 'undefined' && !isAuthenticated) {
       refresh(token).then((res) => {
-        if (res.status === 200) {
-          setCookie('token', res.data.data.token, 1);
+        const response = res as ResponseProps;
+        if (response.status === 200) {
           setUser({
-            firstName: res.data.data.firstName,
-            lastName: res.data.data.lastName,
-            email: res.data.data.email,
-            userId: res.data.data.userId,
+            firstName: response.data.data.firstName,
+            lastName: response.data.data.lastName,
+            email: response.data.data.email,
+            userId: response.data.data.userId,
           });
+          setCookie('token', response.data.data.token, 1);
           setIsAuthenticated(true);
+          console.log('Token refreshed');
         }
-        if (res.status === 401 || res.status === 403) {
+        if (response.status === 401 || response.status === 403) {
+          console.log('Unauthorized');
           logoutUser();
         }
       });

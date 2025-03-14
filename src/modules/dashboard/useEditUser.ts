@@ -19,9 +19,11 @@ export const useEditUser = () => {
     setLoading(true);
     try {
       const res = await details(formData, token);
-      if (res.status === 200) {
+      if (res && res.status === 200) {
         loginUser(res.data.data);
         alert('User updated successfully');
+      } else {
+        alert('Error updating user data');
       }
       triggerReload();
     } catch (error) {

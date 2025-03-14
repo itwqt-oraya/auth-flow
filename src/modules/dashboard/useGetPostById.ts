@@ -1,12 +1,20 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 
 import {getPost} from '@api/dashboard';
 import {getCookie} from '@utils/cookie';
 
+interface PostData {
+  title: string;
+  message: string;
+}
+
 export const useGetPostById = () => {
-  const [response, setResponse] = useState({});
+  const [response, setResponse] = useState<PostData>({
+    title: '',
+    message: '',
+  });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<unknown>(null);
   const token = getCookie('token');
 
   // fetch data using api
@@ -15,7 +23,14 @@ export const useGetPostById = () => {
     setLoading(true);
     try {
       const res = await getPost(id, token);
-      setResponse(res.data);
+      if (res) {
+        setResponse(res.data);
+      } else {
+        setResponse({
+          title: '',
+          message: '',
+        });
+      }
     } catch (error) {
       setError(error);
       throw error;

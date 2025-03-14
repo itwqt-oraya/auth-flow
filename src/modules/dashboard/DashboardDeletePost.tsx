@@ -13,9 +13,14 @@ import {CiWarning} from 'react-icons/ci';
 
 interface DeletePost {
   isOpen?: boolean;
-  toggle?: () => void;
-  id?: string;
-  reload?: () => void;
+  toggle: () => void;
+  id: string;
+  reload: () => void;
+}
+
+interface PostData {
+  title: string;
+  message: string;
 }
 
 export default function DashboardDeletePost({
@@ -27,7 +32,7 @@ export default function DashboardDeletePost({
   const {error, deleteApi} = useDeletePost();
   const {response, fetch} = useGetPostById();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PostData>({
     title: '',
     message: '',
   });

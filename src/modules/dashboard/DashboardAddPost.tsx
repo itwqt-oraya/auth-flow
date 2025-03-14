@@ -17,8 +17,8 @@ interface PostInput {
 
 interface AddPost {
   isOpen?: boolean;
-  toggle?: () => void;
-  reload?: () => void;
+  toggle: () => void;
+  reload: () => void;
 }
 
 export default function DashboardAddPost({isOpen, toggle, reload}: AddPost) {

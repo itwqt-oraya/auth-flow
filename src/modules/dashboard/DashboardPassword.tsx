@@ -31,7 +31,7 @@ export default function DashboardPassword({isOpen, toggle}: UserPassword) {
 
   const onSubmit: SubmitHandler<PasswordInput> = async (data) => {
     const res = await changePassword(data);
-    if (res.status === 400) {
+    if (!res || res.status === 400) {
       alert('Error changing password');
       return;
     }

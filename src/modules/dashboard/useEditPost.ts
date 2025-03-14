@@ -10,7 +10,7 @@ interface FormData {
 export const useEditPost = () => {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>('');
   const token = getCookie('token');
 
   // pUT data using api
@@ -18,13 +18,15 @@ export const useEditPost = () => {
     setLoading(true);
     try {
       const res = await updatePost(id, formData, token);
-      if (res.status === 200) {
+      if (res && res.status === 200) {
         setResponse(res.data);
         alert('Post updated successfully');
+      } else {
+        setResponse({});
+        alert('Error updating post data');
       }
-      setResponse(res.data);
     } catch (error) {
-      setError(error);
+      setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }

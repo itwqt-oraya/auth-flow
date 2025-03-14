@@ -5,19 +5,23 @@ import {getCookie} from '@utils/cookie';
 export const useDeletePost = () => {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>('');
   const token = getCookie('token');
 
   // delete data using api
-  async function deleteApi(id) {
+  async function deleteApi(id: string) {
     setLoading(true);
     try {
       const res = await deletePost(id, token);
-      if (res.status === 200) {
+      if (res && res.status === 200) {
+        setResponse(res.data);
         alert('Post deleted successfully');
+      } else {
+        setResponse({});
+        alert('Error deleting post data');
       }
     } catch (error) {
-      setError(error);
+      setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }

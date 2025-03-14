@@ -11,7 +11,7 @@ interface UserInput {
 
 interface UserDetails {
   isOpen?: boolean;
-  toggle?: () => void;
+  toggle: () => void;
 }
 export default function DashboardDetails({isOpen, toggle}: UserDetails) {
   const {user} = useContext(AuthContext);
