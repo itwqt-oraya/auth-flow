@@ -1,16 +1,20 @@
 import axios, {AxiosError} from 'axios';
 import {getCookie} from '@utils/cookie';
 
-const token = getCookie('token');
-
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 5000,
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    ...(token && {Authorization: `Bearer ${token}`}),
   },
+});
+
+instance.interceptors.request.use((config) => {
+  const token = getCookie('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+
+  return config;
 });
 
 instance.interceptors.response.use(
