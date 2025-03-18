@@ -1,4 +1,5 @@
 import {lazy} from 'react';
+import {RouteProps} from '@/models/routes';
 // Layout
 import {PublicLayout} from '@components/Layout';
 
@@ -6,9 +7,8 @@ import {PublicLayout} from '@components/Layout';
 const Login = lazy(() => import('@pages/login'));
 const Signup = lazy(() => import('@pages/signup'));
 
-const user = {
+const user: RouteProps = {
   path: '/',
-  isPrivate: false,
   layout: PublicLayout,
   element: <Login />,
   children: [

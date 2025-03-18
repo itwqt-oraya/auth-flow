@@ -1,30 +1,23 @@
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {deletePost} from '@api/dashboard';
-import {getCookie} from '@utils/cookie';
 
 export const useDeletePost = () => {
-  const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
-  const token = getCookie('token');
 
-  // delete data using api
-  async function deleteApi(id: string) {
+  const deleteApi = useCallback(async (id: string) => {
     setLoading(true);
     try {
-      const res = await deletePost(id, token);
-      if (res && res.status === 200) {
-        setResponse(res.data);
-        alert('Post deleted successfully');
-      } else {
-        setResponse({});
-        alert('Error deleting post data');
+      const res = await deletePost(id);
+      if (res) {
+        alert(res.message);
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }
-  }
-  return {response, loading, error, deleteApi};
+  }, []);
+
+  return {loading, error, deleteApi};
 };

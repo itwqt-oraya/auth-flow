@@ -1,36 +1,24 @@
 import {useState} from 'react';
 import {createPost} from '@api/dashboard';
-import {getCookie} from '@utils/cookie';
-
-interface FormData {
-  title: string;
-  message: string;
-}
+import {POST_PAYLOAD} from '@/models/posts';
 
 export const useAddPost = () => {
-  const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
-  const token = getCookie('token');
 
-  // post data using api
-  async function post(formData: FormData) {
+  const post = async (data: POST_PAYLOAD) => {
     setLoading(true);
     try {
-      const res = await createPost(formData, token);
-      if (res && res.status === 200) {
-        setResponse(res.data);
-        alert('Post created successfully');
-      } else {
-        setResponse({});
-        alert('Error creating post data');
+      const res = await createPost(data);
+      if (res) {
+        alert(res.message);
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  return {response, loading, error, post};
+  return {loading, error, post};
 };

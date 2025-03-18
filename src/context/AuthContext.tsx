@@ -1,60 +1,9 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  Dispatch,
-  SetStateAction,
-} from 'react';
-import {getCookie, setCookie, deleteCookie} from '@utils/cookie';
-import {refresh} from '@api/auth';
+import {createContext, useState, ReactNode} from 'react';
+import {setCookie, deleteCookie} from '@utils/cookie';
+import {USER_RESPONSE} from '@/models/user';
+import {AUTH_CONTEXT} from '@/models/context';
 
-interface AuthContextProps {
-  user: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    userId: string;
-  };
-  setUser: Dispatch<
-    SetStateAction<{
-      firstName: string;
-      lastName: string;
-      email: string;
-      userId: string;
-    }>
-  >;
-  isAuthenticated: boolean;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-  loginUser: (res: LoginProps) => void;
-  logoutUser: () => void;
-  refreshAuth: () => void;
-  reload: boolean;
-  triggerReload: () => void;
-}
-
-interface ResponseProps {
-  status: number;
-  data: {
-    data: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      userId: string;
-      token: string;
-    };
-  };
-}
-
-interface LoginProps {
-  firstName: string;
-  lastName: string;
-  email: string;
-  userId: string;
-  token: string;
-}
-
-export const AuthContext = createContext<AuthContextProps>();
+export const AuthContext = createContext<AUTH_CONTEXT>();
 
 export function AuthProvider({children}: {children: ReactNode}) {
   const [user, setUser] = useState({
@@ -66,23 +15,16 @@ export function AuthProvider({children}: {children: ReactNode}) {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const token = getCookie('token');
-    if (token && token !== 'undefined') {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
   // login -> set token in cookie
-  const loginUser = (res: LoginProps) => {
+  const loginUser = (res: USER_RESPONSE) => {
     setUser({
-      firstName: res.firstName,
-      lastName: res.lastName,
-      email: res.email,
-      userId: res.userId,
+      firstName: res.data.firstName,
+      lastName: res.data.lastName,
+      email: res.data.email,
+      userId: res.data.userId,
     });
     setIsAuthenticated(true);
-    setCookie('token', res.token, 1);
+    setCookie('token', res.data.token, 1);
   };
 
   // logout -> remove token from cookie
@@ -98,49 +40,14 @@ export function AuthProvider({children}: {children: ReactNode}) {
     window.location.href = '/';
   };
 
-  // check if cookie still exists and refresh token
-  const refreshAuth = () => {
-    const token = getCookie('token');
-    if (token && token !== 'undefined' && !isAuthenticated) {
-      refresh(token).then((res) => {
-        const response = res as ResponseProps;
-        if (response.status === 200) {
-          setUser({
-            firstName: response.data.data.firstName,
-            lastName: response.data.data.lastName,
-            email: response.data.data.email,
-            userId: response.data.data.userId,
-          });
-          setCookie('token', response.data.data.token, 1);
-          setIsAuthenticated(true);
-          console.log('Token refreshed');
-        }
-        if (response.status === 401 || response.status === 403) {
-          console.log('Unauthorized');
-          logoutUser();
-        }
-      });
-    }
-  };
-
-  const [reload, setReload] = useState(false);
-
-  const triggerReload = () => {
-    setReload(!reload);
-  };
-
   return (
     <AuthContext.Provider
       value={{
         user,
         setUser,
         isAuthenticated,
-        setIsAuthenticated,
         loginUser,
         logoutUser,
-        refreshAuth,
-        reload,
-        triggerReload,
       }}
     >
       {children}

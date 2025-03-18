@@ -1,4 +1,3 @@
-import {useState, useEffect} from 'react';
 import {
   Button,
   Modal,
@@ -9,62 +8,25 @@ import {
   FormGroup,
   Spinner,
 } from 'reactstrap';
-import {useDeletePost, useGetPostById} from '@modules/dashboard/';
+import {useDeletePost} from '@modules/dashboard/';
 import {CiWarning} from 'react-icons/ci';
-
-interface DeletePost {
-  isOpen?: boolean;
-  toggle: () => void;
-  id: string;
-  reload: () => void;
-}
-
-interface PostData {
-  title: string;
-  message: string;
-}
+import {DELETE_POST} from '@/models/posts';
 
 export default function DashboardDeletePost({
   isOpen,
   toggle,
   id,
+  POST_PAYLOAD,
   reload,
-}: DeletePost) {
+}: DELETE_POST) {
   const {error, loading, deleteApi} = useDeletePost();
-  const {
-    response,
-    fetch,
-  }: {response: PostData | null; fetch: (id: string) => void} =
-    useGetPostById();
-
-  const [formData, setFormData] = useState<PostData>({
-    title: '',
-    message: '',
-  });
-
-  useEffect(() => {
-    fetch(id);
-  }, [id]);
-
-  useEffect(() => {
-    if (response) {
-      setFormData({
-        title: response.title,
-        message: response.message,
-      });
-    }
-  }, [response]);
 
   const handleSubmit = () => {
     deleteApi(id);
     if (!error) {
-      reload();
       toggle();
+      reload();
     }
-  };
-
-  const handleClose = () => {
-    toggle();
   };
 
   if (loading) {
@@ -97,9 +59,11 @@ export default function DashboardDeletePost({
           <FormGroup>
             <CiWarning className="text-danger w-100 fs-1 text-center mb-2" />
 
-            <h6 className="text-center text-semibold mb-0">{formData.title}</h6>
+            <h6 className="text-center text-semibold mb-0">
+              {POST_PAYLOAD.title}
+            </h6>
             <p className="text-muted text-center fst-italic">
-              {formData.message || 'This post does not have a message.'}
+              {POST_PAYLOAD.message || 'This post does not have a message.'}
             </p>
           </FormGroup>
         </Form>
@@ -108,7 +72,7 @@ export default function DashboardDeletePost({
         <Button color="dark" type="submit" onClick={handleSubmit}>
           Delete
         </Button>
-        <Button color="dark" outline onClick={handleClose}>
+        <Button color="dark" outline onClick={toggle}>
           Cancel
         </Button>
       </ModalFooter>

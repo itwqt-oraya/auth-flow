@@ -1,19 +1,19 @@
 import {useState, useContext} from 'react';
 import {AuthContext} from '@context/AuthContext';
-import {login} from '@api/auth';
-import {USER, LOGIN_PAYLOAD} from '@/models/user';
+import {refresh} from '@api/auth';
+import {USER} from '@/models/user';
 import {AxiosError} from 'axios';
 
-export const useLogin = () => {
+export const useRefresh = () => {
   const {loginUser, isAuthenticated} = useContext(AuthContext);
   const [response, setResponse] = useState<USER | []>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  async function postLogin(payload: LOGIN_PAYLOAD) {
+  async function refreshUser() {
     setLoading(true);
     try {
-      const {data} = await login(payload);
+      const {data} = await refresh();
       if (data) {
         setResponse(data);
         loginUser({data: data});
@@ -32,5 +32,5 @@ export const useLogin = () => {
     }
   }
 
-  return {response, loading, error, postLogin};
+  return {response, loading, error, refreshUser};
 };

@@ -1,4 +1,6 @@
 import {lazy} from 'react';
+import {RouteProps} from '@/models/routes';
+
 // Layout
 import {PrivateLayout} from '@components/Layout';
 
@@ -22,9 +24,8 @@ const DashboardPassword = lazy(
   () => import('@modules/dashboard/DashboardPassword')
 );
 
-const dashboard = {
+const dashboard: RouteProps = {
   path: '/dashboard',
-  isPrivate: true,
   layout: PrivateLayout,
   element: <Dashboard />,
   children: [
@@ -35,13 +36,18 @@ const dashboard = {
     {
       path: 'post/edit/:id',
       element: (
-        <DashboardEditPost toggle={() => ''} reload={() => ''} id={''} />
+        <DashboardEditPost toggle={() => ''} id={''} reload={() => ''} />
       ),
     },
     {
       path: 'post/delete/:id',
       element: (
-        <DashboardDeletePost toggle={() => ''} reload={() => ''} id={''} />
+        <DashboardDeletePost
+          toggle={() => ''}
+          id={''}
+          POST_PAYLOAD={{title: '', message: ''}}
+          reload={() => ''}
+        />
       ),
     },
     {

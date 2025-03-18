@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {
   Button,
   Modal,
@@ -7,74 +6,49 @@ import {
   ModalFooter,
   Spinner,
 } from 'reactstrap';
-import {useEditPost, useGetPostById} from '@modules/dashboard/';
+import {useEditPost} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
-
-interface PostInput {
-  title: string;
-  message: string;
-}
-
-interface EdistPost {
-  isOpen?: boolean;
-  toggle: () => void;
-  id: string;
-  reload: () => void;
-}
+import {POST_PAYLOAD, EDIT_POST} from '@/models/posts';
+import {useEffect} from 'react';
 
 export default function DashboardEditPost({
   isOpen,
   toggle,
   id,
   reload,
-}: EdistPost) {
-  const {put, loading, error} = useEditPost();
-  const {fetch, response} = useGetPostById();
+}: EDIT_POST) {
+  const {put, loading, error, response, fetchPost} = useEditPost();
 
   useEffect(() => {
-    if (isOpen) {
-      fetch(id);
+    if (isOpen && id) {
+      fetchPost(id);
     }
-  }, [isOpen, id]);
-
-  useEffect(() => {
-    if (response) {
-      const {title, message} = response;
-      const defaultValues = {
-        title,
-        message,
-      };
-      reset(defaultValues);
-    }
-  }, [response]);
+  }, [isOpen, id, fetchPost]);
 
   const {
     register,
     handleSubmit,
     reset,
     formState: {errors},
-  } = useForm<PostInput>({
+  } = useForm<POST_PAYLOAD>({
     defaultValues: {
       title: '',
       message: '',
     },
   });
 
-  const onSubmit: SubmitHandler<PostInput> = async (data) => {
+  useEffect(() => {
+    if (response) {
+      reset(response);
+    }
+  }, [response, reset]);
+
+  const onSubmit: SubmitHandler<POST_PAYLOAD> = async (data) => {
     await put(data, id);
     if (!error) {
-      reload();
       toggle();
+      reload();
     }
-  };
-
-  const handleClose = () => {
-    const defaultValues = {
-      title: response?.title,
-      message: response?.message,
-    };
-    reset(defaultValues);
-    toggle();
   };
 
   if (loading) {
@@ -143,7 +117,7 @@ export default function DashboardEditPost({
             <Button color="dark" type="submit" onClick={handleSubmit(onSubmit)}>
               Submit
             </Button>
-            <Button color="dark" outline onClick={handleClose}>
+            <Button color="dark" outline onClick={toggle}>
               Cancel
             </Button>
           </ModalFooter>

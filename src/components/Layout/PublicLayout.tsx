@@ -1,28 +1,27 @@
-import {useContext, useEffect, ReactNode} from 'react';
-import {Navigate, useNavigate, Outlet} from 'react-router';
+import {useContext, useEffect} from 'react';
+import {Navigate, Outlet} from 'react-router';
 import {Container} from 'reactstrap';
 import {Nav} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
+import {getCookie} from '@utils/cookie';
+import {useRefresh} from '@utils/useRefresh';
 
-export default function PublicLayout({children}: {children: ReactNode}) {
-  const {isAuthenticated, user, refreshAuth} = useContext(AuthContext);
-  const nav = useNavigate();
+export default function PublicLayout() {
+  const {isAuthenticated} = useContext(AuthContext);
+  const {refreshUser} = useRefresh();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      refreshAuth();
-      nav('/dashboard');
-    } else {
-      nav('/');
+    const token = getCookie('token');
+    if (token && token !== 'undefined' && !isAuthenticated) {
+      refreshUser();
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated]);
 
   return (
     <>
       {isAuthenticated ? <Navigate to="/dashboard" /> : null}
       <Nav />
       <Container>
-        {children}
         <Outlet />
       </Container>
     </>

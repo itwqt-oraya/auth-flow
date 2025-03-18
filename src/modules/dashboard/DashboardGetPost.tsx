@@ -2,7 +2,8 @@ import {useEffect, useState} from 'react';
 import {transformDate} from '@utils/date';
 import {Button, Spinner} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
-import {sampleFunction} from '@utils/http';
+import {POST, POST_PAYLOAD} from '@/models/posts';
+
 // Modals
 import {
   DashboardAddPost,
@@ -10,34 +11,20 @@ import {
   DashboardDeletePost,
 } from '@modules/dashboard';
 
-interface Post {
-  postId: string;
-  title: string;
-  updatedAt: string;
-  message: string;
-}
-
-interface ApiResponse {
-  data: Post[];
-}
-
 export default function DashboardGetPost() {
   const {response, loading, error, reload} = useGetPost();
-  sampleFunction(45);
 
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<POST[] | []>([]);
+  const [formData, setFormData] = useState<POST_PAYLOAD>({
+    title: '',
+    message: '',
+  });
 
   useEffect(() => {
-    const handleResponse = (response: ApiResponse) => {
-      if (response && !loading) {
-        setPosts(response.data);
-      }
-    };
-
-    if (response && 'data' in response) {
-      handleResponse(response as ApiResponse);
+    if (response && !loading && !error) {
+      setPosts(response);
     }
-  }, [response]);
+  }, [response, loading, error]);
 
   // Modal State
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -71,6 +58,7 @@ export default function DashboardGetPost() {
         toggle={toggleAddModal}
         reload={reload}
       />
+
       <DashboardEditPost
         isOpen={isEditOpen}
         toggle={toggleEditModal}
@@ -81,6 +69,7 @@ export default function DashboardGetPost() {
         isOpen={isDeleteOpen}
         toggle={toggleDeleteModal}
         id={postId}
+        POST_PAYLOAD={formData}
         reload={reload}
       />
 
@@ -118,8 +107,8 @@ export default function DashboardGetPost() {
                 color="dark"
                 size="sm"
                 onClick={() => {
-                  toggleEditModal();
                   setPostId(post.postId);
+                  toggleEditModal();
                 }}
               >
                 Edit
@@ -130,8 +119,9 @@ export default function DashboardGetPost() {
                 color="dark"
                 size="sm"
                 onClick={() => {
-                  toggleDeleteModal();
                   setPostId(post.postId);
+                  setFormData({title: post.title, message: post.message});
+                  toggleDeleteModal();
                 }}
               >
                 Delete

@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
+import axios, {AxiosError} from 'axios';
 import {getCookie} from '@utils/cookie';
 
 const token = getCookie('token');

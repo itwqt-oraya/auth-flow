@@ -8,19 +8,9 @@ import {
 } from 'reactstrap';
 import {useChangePassword} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
+import {USER_PASSWORD, CHANGE_PASSWORD} from '@/models/user';
 
-interface PasswordInput {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-interface UserPassword {
-  isOpen?: boolean;
-  toggle: () => void;
-}
-
-export default function DashboardPassword({isOpen, toggle}: UserPassword) {
+export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
   const {loading, error, changePassword} = useChangePassword();
 
   const {
@@ -28,7 +18,7 @@ export default function DashboardPassword({isOpen, toggle}: UserPassword) {
     handleSubmit,
     reset,
     formState: {errors},
-  } = useForm<PasswordInput>({
+  } = useForm<USER_PASSWORD>({
     defaultValues: {
       oldPassword: '',
       newPassword: '',
@@ -36,14 +26,9 @@ export default function DashboardPassword({isOpen, toggle}: UserPassword) {
     },
   });
 
-  const onSubmit: SubmitHandler<PasswordInput> = async (data) => {
-    const res = await changePassword(data);
-    if (!res || res.status === 400) {
-      alert('Error changing password');
-      return;
-    }
-    alert('Password changed successfully');
-    handleClose();
+  const onSubmit: SubmitHandler<USER_PASSWORD> = async (data) => {
+    await changePassword(data);
+    toggle();
   };
 
   const handleClose = () => {

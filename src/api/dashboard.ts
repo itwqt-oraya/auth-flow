@@ -8,24 +8,24 @@ export const getPosts = () => {
 };
 
 // GET /post/:id
-export const getPost = (id: string, token: string) => {
-  return http('GET', `/post/${id}`, null, token);
+export const getPost = (id: string) => {
+  return http<POST_PAYLOAD>('GET', `/post/${id}`);
 };
 
 // POST /post create post
 // title , message
 export const createPost = (data: POST_PAYLOAD) => {
-  return http<{message: string}>('POST', '/post', data);
+  return http<POST_PAYLOAD>('POST', '/post', data);
 };
 
 // PUT /post/:id update post
 // title , message
-export const updatePost = (id: string, data: POST_PAYLOAD, token: string) => {
-  return http('PUT', `/post/${id}`, data, token);
+export const updatePost = (id: string, data: POST_PAYLOAD) => {
+  return http<POST_PAYLOAD>('PUT', `/post/${id}`, data);
 };
 
 // DELETE /post/:id delete post
 // id
-export const deletePost = (id: string, token: string) => {
-  return http('DELETE', `/post/${id}`, null, token);
+export const deletePost = (id: string) => {
+  return http('DELETE', `/post/${id}`);
 };

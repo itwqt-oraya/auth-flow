@@ -1,17 +1,20 @@
 import {useContext, useEffect} from 'react';
-import {Outlet, Navigate, useNavigate} from 'react-router';
+import {Outlet, Navigate} from 'react-router';
 import {NavPrivate} from '@components/NavBar';
 import {AuthContext} from '@context/AuthContext';
+import {getCookie} from '@utils/cookie';
+import {useRefresh} from '@utils/useRefresh';
 
 export default function PrivateLayout() {
-  const {user, isAuthenticated, refreshAuth} = useContext(AuthContext);
-  const nav = useNavigate();
+  const {isAuthenticated} = useContext(AuthContext);
+  const {refreshUser} = useRefresh();
+
   useEffect(() => {
-    if (!isAuthenticated) {
-      refreshAuth();
-      nav('/');
+    const token = getCookie('token');
+    if (token && token !== 'undefined' && !isAuthenticated) {
+      refreshUser();
     }
-  }, [isAuthenticated, refreshAuth, user]);
+  }, [isAuthenticated]);
 
   return (
     <>

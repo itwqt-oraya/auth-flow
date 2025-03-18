@@ -10,17 +10,9 @@ import {
 } from 'reactstrap';
 import {useEditUser} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
+import {USER_UPDATE, USER_DETAILS} from '@/models/user';
 
-interface UserInput {
-  firstName: string;
-  lastName: string;
-}
-
-interface UserDetails {
-  isOpen?: boolean;
-  toggle: () => void;
-}
-export default function DashboardDetails({isOpen, toggle}: UserDetails) {
+export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
   const {user} = useContext(AuthContext);
   const {error, loading, putEdit} = useEditUser();
 
@@ -29,9 +21,9 @@ export default function DashboardDetails({isOpen, toggle}: UserDetails) {
     handleSubmit,
     reset,
     formState: {errors},
-  } = useForm<UserInput>();
+  } = useForm<USER_UPDATE>();
 
-  const onSubmit: SubmitHandler<UserInput> = async (data) => {
+  const onSubmit: SubmitHandler<USER_UPDATE> = async (data) => {
     await putEdit(data);
     toggle();
   };

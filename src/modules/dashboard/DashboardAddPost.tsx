@@ -9,37 +9,21 @@ import {
 
 import {useAddPost} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
+import {POST_PAYLOAD, ADD_POST} from '@/models/posts';
 
-interface PostInput {
-  title: string;
-  message: string;
-}
-
-interface AddPost {
-  isOpen?: boolean;
-  toggle: () => void;
-  reload: () => void;
-}
-
-export default function DashboardAddPost({isOpen, toggle, reload}: AddPost) {
+export default function DashboardAddPost({isOpen, toggle, reload}: ADD_POST) {
   const {loading, error, post} = useAddPost();
 
   const {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<PostInput>();
+  } = useForm<POST_PAYLOAD>();
 
-  const onSubmit: SubmitHandler<PostInput> = async (data) => {
+  const onSubmit: SubmitHandler<POST_PAYLOAD> = async (data) => {
     await post(data);
-    if (!error) {
-      reload();
-      toggle();
-    }
-  };
-
-  const handleClose = () => {
     toggle();
+    reload();
   };
 
   if (loading) {
@@ -106,7 +90,7 @@ export default function DashboardAddPost({isOpen, toggle, reload}: AddPost) {
             <Button color="dark" type="submit" onClick={handleSubmit(onSubmit)}>
               Submit
             </Button>
-            <Button color="dark" outline onClick={handleClose}>
+            <Button color="dark" outline onClick={toggle}>
               Cancel
             </Button>
           </ModalFooter>

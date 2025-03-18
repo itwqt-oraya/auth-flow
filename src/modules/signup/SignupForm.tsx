@@ -1,10 +1,10 @@
-import {Button} from 'reactstrap';
+import {Button, Spinner} from 'reactstrap';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {useSignup} from '@modules/signup';
 import {SIGNUP_PAYLOAD} from '@/models/user';
 
 export default function SignupForm() {
-  const {loading, postSignup} = useSignup();
+  const {error, loading, postSignup} = useSignup();
 
   const {
     register,
@@ -24,11 +24,16 @@ export default function SignupForm() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+        <Spinner color="dark" />
+      </div>
+    );
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {error && <div className="alert alert-danger">{error}</div>}
       <div className="mb-3">
         <label htmlFor="firstName" className="form-label fw-semibold">
           First Name <span className="text-danger">*</span>
