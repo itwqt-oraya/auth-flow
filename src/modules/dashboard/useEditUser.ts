@@ -20,7 +20,6 @@ export const useEditUser = () => {
         alert('Error updating user data');
       }
     } catch (error) {
-      console.log(error);
       setError(error instanceof Error ? error.message : String(error));
     } finally {
       setLoading(false);

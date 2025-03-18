@@ -8,7 +8,7 @@ export const login = (data: LOGIN_PAYLOAD) => {
 
 // POST for signuo /user/signup
 export const signup = (data: SIGNUP_PAYLOAD) => {
-  return http<SIGNUP_PAYLOAD>('POST', '/user/signup', data);
+  return http<{message: string}>('POST', '/user/signup', data);
 };
 
 // GET for refresh token

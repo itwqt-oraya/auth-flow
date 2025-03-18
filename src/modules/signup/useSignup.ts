@@ -4,17 +4,16 @@ import {SIGNUP_PAYLOAD} from '@/models/user';
 import {AxiosError} from 'axios';
 
 export const useSignup = () => {
-  const [response, setResponse] = useState<SIGNUP_PAYLOAD | []>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  async function postSignup(data: SIGNUP_PAYLOAD) {
+  async function postSignup(payload: SIGNUP_PAYLOAD) {
     setLoading(true);
     try {
-      const res = await signup(data);
-      setResponse(res);
-      // handle status code here
-      // handle redirect
+      const {message} = await signup(payload);
+      if (message) {
+        alert(message);
+      }
     } catch (error) {
       if (error instanceof AxiosError) {
         const {message} = error;
@@ -24,5 +23,5 @@ export const useSignup = () => {
       setLoading(false);
     }
   }
-  return {response, error, loading, postSignup};
+  return {error, loading, postSignup};
 };

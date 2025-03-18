@@ -16,10 +16,8 @@ export const useGetPost = () => {
       setResponse(data);
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error);
         const {message} = error;
         setError(message);
-        console.log(message);
       }
     } finally {
       setLoading(false);
