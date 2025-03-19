@@ -20,6 +20,7 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: {errors},
   } = useForm<USER_UPDATE>();
 
@@ -67,12 +68,22 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
             <label htmlFor="firstName" className="form-label fw-semibold mb-1">
               First Name <span className="text-danger">*</span>
             </label>
+            <span className="text-muted ms-2">
+              {watch('firstName')
+                ? `${watch('firstName').length} / 50`
+                : '0 / 50'}
+            </span>
             <input
               type="text"
               className="form-control"
               id="firstName"
               defaultValue={user.firstName}
-              {...register('firstName', {required: true})}
+              maxLength={50}
+              {...register('firstName', {
+                required: true,
+                minLength: 1,
+                maxLength: 50,
+              })}
             />
             {errors.firstName && (
               <span className="text-danger">This field is required</span>
@@ -83,12 +94,22 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
             <label htmlFor="lastName" className="form-label fw-semibold mb-1">
               Last Name <span className="text-danger">*</span>
             </label>
+            <span className="text-muted ms-2">
+              {watch('lastName')
+                ? `${watch('lastName').length} / 50`
+                : '0 / 50'}
+            </span>
             <input
               type="text"
               className="form-control"
               id="lastName"
               defaultValue={user.lastName}
-              {...register('lastName', {required: true})}
+              maxLength={50}
+              {...register('lastName', {
+                required: true,
+                minLength: 1,
+                maxLength: 50,
+              })}
             />
             {errors.lastName && (
               <span className="text-danger">This field is required</span>

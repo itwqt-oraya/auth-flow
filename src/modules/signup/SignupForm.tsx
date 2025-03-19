@@ -44,7 +44,9 @@ export default function SignupForm() {
           type="text"
           className="form-control mb-2"
           id="firstName"
-          {...register('firstName', {required: true})}
+          {...register('firstName', {required: true, minLength: 1})}
+          title="Maximum of 50 characters"
+          placeholder="Enter your first name"
         />
         {errors.firstName && (
           <span className="text-danger fst-italic">
@@ -61,7 +63,9 @@ export default function SignupForm() {
           type="text"
           className="form-control mb-2"
           id="lastName"
-          {...register('lastName', {required: true})}
+          {...register('lastName', {required: true, minLength: 1})}
+          title="Maximum of 50 characters"
+          placeholder="Enter your last name"
         />
         {errors.lastName && (
           <span className="text-danger fst-italic">
@@ -79,6 +83,7 @@ export default function SignupForm() {
           className="form-control mb-2"
           id="email"
           {...register('email', {required: true})}
+          placeholder="youremail@email.com"
         />
         {errors.email && (
           <span className="text-danger fst-italic">
@@ -95,7 +100,10 @@ export default function SignupForm() {
           type="password"
           className="form-control mb-2"
           id="password"
-          {...register('password', {required: true})}
+          minLength={8}
+          {...register('password', {required: true, minLength: 8})}
+          title="Minimum of 8 characters"
+          placeholder="Enter your password"
         />
         {errors.password && (
           <span className="text-danger fst-italic">

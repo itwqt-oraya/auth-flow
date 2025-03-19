@@ -11,7 +11,6 @@ export const useGetPostById = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // fetch data using api
   const fetch = async (id: string) => {
     setLoading(true);
     try {

@@ -43,6 +43,7 @@ export default function LoginForm() {
           className="form-control mb-2"
           id="email"
           {...register('email', {required: true})}
+          placeholder="youremail@email.com"
         />
         {errors.email && (
           <span className="text-danger fst-italic">
@@ -60,6 +61,7 @@ export default function LoginForm() {
           className="form-control mb-2"
           id="password"
           {...register('password', {required: true})}
+          placeholder="Enter your password"
         />
         {errors.password && (
           <span className="text-danger fst-italic">

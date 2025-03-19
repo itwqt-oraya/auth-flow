@@ -29,6 +29,7 @@ export default function DashboardEditPost({
     register,
     handleSubmit,
     reset,
+    watch,
     formState: {errors},
   } = useForm<POST_PAYLOAD>({
     defaultValues: {
@@ -83,11 +84,19 @@ export default function DashboardEditPost({
             <label htmlFor="title" className="form-label fw-semibold mb-1">
               Title <span className="text-danger">*</span>
             </label>
+            <span className="text-muted ms-2">
+              {watch('title') ? `${watch('title').length} / 50` : '0 / 50'}
+            </span>
             <input
               type="text"
               className="form-control mb-2"
               id="title"
-              {...register('title', {required: true})}
+              maxLength={50}
+              {...register('title', {
+                required: true,
+                minLength: 1,
+                maxLength: 50,
+              })}
             />
             {errors.title && (
               <span className="text-danger fst-italic">
@@ -100,11 +109,21 @@ export default function DashboardEditPost({
             <label htmlFor="message" className="form-label fw-semibold mb-1">
               Message <span className="text-danger">*</span>
             </label>
+            <span className="text-muted ms-2">
+              {watch('message')
+                ? `${watch('message').length} / 255`
+                : '0 / 255'}
+            </span>
             <input
               type="text"
               className="form-control mb-2"
               id="message"
-              {...register('message', {required: true})}
+              maxLength={255}
+              {...register('message', {
+                required: true,
+                minLength: 1,
+                maxLength: 255,
+              })}
             />
             {errors.message && (
               <span className="text-danger fst-italic">

@@ -78,7 +78,8 @@ export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
               type="password"
               className="form-control"
               id="oldPassword"
-              {...register('oldPassword', {required: true})}
+              minLength={8}
+              {...register('oldPassword', {required: true, minLength: 8})}
             />
             {errors.oldPassword && (
               <span className="text-danger">This field is required</span>
@@ -96,7 +97,8 @@ export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
               type="password"
               className="form-control"
               id="newPassword"
-              {...register('newPassword', {required: true})}
+              minLength={8}
+              {...register('newPassword', {required: true, minLength: 8})}
             />
             {errors.newPassword && (
               <span className="text-danger">This field is required</span>
@@ -114,7 +116,8 @@ export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
               type="password"
               className="form-control"
               id="confirmPassword"
-              {...register('confirmPassword', {required: true})}
+              minLength={8}
+              {...register('confirmPassword', {required: true, minLength: 8})}
             />
             {errors.confirmPassword && (
               <span className="text-danger">This field is required</span>
