@@ -6,7 +6,7 @@ export interface AUTH_CONTEXT {
   setUser: (
     user: Pick<USER, 'firstName' | 'lastName' | 'email' | 'userId'>
   ) => void;
-  isAuthenticated: boolean;
   loginUser: (res: USER_RESPONSE) => void;
   logoutUser: () => void;
+  isAuthenticated: boolean;
 }

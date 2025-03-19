@@ -5,7 +5,7 @@ import {USER} from '@/models/user';
 import {AxiosError} from 'axios';
 
 export const useRefresh = () => {
-  const {loginUser, isAuthenticated} = useContext(AuthContext);
+  const {loginUser} = useContext(AuthContext);
   const [response, setResponse] = useState<USER | []>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,10 +25,6 @@ export const useRefresh = () => {
       }
     } finally {
       setLoading(false);
-
-      if (isAuthenticated) {
-        window.location.href = '/dashboard';
-      }
     }
   }
 

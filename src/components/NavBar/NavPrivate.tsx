@@ -10,9 +10,11 @@ import {
 import {AuthContext} from '@/context';
 
 import {DashboardPassword, DashboardDetails} from '@modules/dashboard';
+import {getCookie} from '@/utils/cookie';
 
 export default function NavPrivate() {
-  const {user, isAuthenticated, logoutUser} = useContext(AuthContext);
+  const {user, logoutUser} = useContext(AuthContext);
+  const isAuthenticated = getCookie('isAuthenticated');
   const userName = `${user.firstName} ${user.lastName}`;
 
   const [collapsed, setCollapsed] = useState(false);

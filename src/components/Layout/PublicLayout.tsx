@@ -1,25 +1,26 @@
 import {useContext, useEffect} from 'react';
-import {Navigate, Outlet} from 'react-router';
+import {Outlet, Navigate} from 'react-router';
 import {Container} from 'reactstrap';
 import {Nav} from '@components/NavBar';
-import {AuthContext} from '@/context';
-import {getCookie} from '@utils/cookie';
 import {useRefresh} from '@utils/useRefresh';
+import {getCookie} from '@/utils/cookie';
+import {AuthContext} from '@/context';
 
 export default function PublicLayout() {
   const {isAuthenticated} = useContext(AuthContext);
+  const token = getCookie('token');
+
   const {refreshUser} = useRefresh();
 
   useEffect(() => {
-    const token = getCookie('token');
-    if (token && token !== 'undefined' && !isAuthenticated) {
+    if (!isAuthenticated && token) {
       refreshUser();
     }
-  }, [isAuthenticated, refreshUser]);
+  }, [refreshUser, isAuthenticated, token]);
 
   return (
     <>
-      {isAuthenticated ? <Navigate to="/dashboard" /> : null}
+      {isAuthenticated && token && <Navigate to="/dashboard" />}
       <Nav />
       <Container>
         <Outlet />

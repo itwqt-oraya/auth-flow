@@ -9,6 +9,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: {errors},
   } = useForm<LOGIN_PAYLOAD>({
     defaultValues: {
@@ -19,6 +20,7 @@ export default function LoginForm() {
 
   const onSubmit: SubmitHandler<LOGIN_PAYLOAD> = async (data) => {
     await postLogin(data);
+    reset();
   };
 
   if (loading) {

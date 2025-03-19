@@ -4,14 +4,13 @@ import {USER_RESPONSE} from '@/models/user';
 import {AuthContext} from '@/context';
 
 export function AuthProvider({children}: {children: ReactNode}) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
     email: '',
     userId: '',
   });
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // login -> set token in cookie
   const loginUser = (res: USER_RESPONSE) => {
@@ -21,8 +20,10 @@ export function AuthProvider({children}: {children: ReactNode}) {
       email: res.data.email,
       userId: res.data.userId,
     });
-    setIsAuthenticated(true);
+    setCookie('isAuthenticated', 'true', 1);
     setCookie('token', res.data.token, 1);
+
+    setIsAuthenticated(true);
   };
 
   // logout -> remove token from cookie
@@ -33,8 +34,9 @@ export function AuthProvider({children}: {children: ReactNode}) {
       email: '',
       userId: '',
     });
-    setIsAuthenticated(false);
     deleteCookie('token');
+    deleteCookie('isAuthenticated');
+    setIsAuthenticated(false);
     window.location.href = '/';
   };
 
@@ -43,9 +45,9 @@ export function AuthProvider({children}: {children: ReactNode}) {
       value={{
         user,
         setUser,
-        isAuthenticated,
         loginUser,
         logoutUser,
+        isAuthenticated,
       }}
     >
       {children}
