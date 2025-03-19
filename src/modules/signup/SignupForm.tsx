@@ -9,6 +9,7 @@ export default function SignupForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: {errors},
   } = useForm<SIGNUP_PAYLOAD>({
     defaultValues: {
@@ -21,6 +22,7 @@ export default function SignupForm() {
 
   const onSubmit: SubmitHandler<SIGNUP_PAYLOAD> = async (data) => {
     await postSignup(data);
+    reset();
   };
 
   if (loading) {

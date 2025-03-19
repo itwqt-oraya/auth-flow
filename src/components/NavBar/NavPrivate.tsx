@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import {AuthContext} from '@context/AuthContext';
+import {AuthContext} from '@/context';
 
 import {DashboardPassword, DashboardDetails} from '@modules/dashboard';
 

@@ -1,9 +1,7 @@
-import {createContext, useState, ReactNode} from 'react';
+import {useState, ReactNode} from 'react';
 import {setCookie, deleteCookie} from '@utils/cookie';
 import {USER_RESPONSE} from '@/models/user';
-import {AUTH_CONTEXT} from '@/models/context';
-
-export const AuthContext = createContext<AUTH_CONTEXT>();
+import {AuthContext} from '@/context';
 
 export function AuthProvider({children}: {children: ReactNode}) {
   const [user, setUser] = useState({

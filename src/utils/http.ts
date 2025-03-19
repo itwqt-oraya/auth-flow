@@ -47,7 +47,3 @@ export const http = async <T = Record<string, unknown>>(
 
   return dataResponse;
 };
-
-export const sampleFunction = <T = string>(data: T) => {
-  return data;
-};

@@ -1,5 +1,5 @@
 import {useState, useContext} from 'react';
-import {AuthContext} from '@context/AuthContext';
+import {AuthContext} from '@/context';
 import {refresh} from '@api/auth';
 import {USER} from '@/models/user';
 import {AxiosError} from 'axios';

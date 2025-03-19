@@ -2,7 +2,7 @@ import {useContext, useEffect} from 'react';
 import {Navigate, Outlet} from 'react-router';
 import {Container} from 'reactstrap';
 import {Nav} from '@components/NavBar';
-import {AuthContext} from '@context/AuthContext';
+import {AuthContext} from '@/context';
 import {getCookie} from '@utils/cookie';
 import {useRefresh} from '@utils/useRefresh';
 
@@ -15,7 +15,7 @@ export default function PublicLayout() {
     if (token && token !== 'undefined' && !isAuthenticated) {
       refreshUser();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, refreshUser]);
 
   return (
     <>

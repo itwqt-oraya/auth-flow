@@ -5,6 +5,7 @@ import {AxiosError} from 'axios';
 
 export const useSignup = () => {
   const [loading, setLoading] = useState(false);
+  const [isOkay, setIsOkay] = useState(false);
   const [error, setError] = useState('');
 
   async function postSignup(payload: SIGNUP_PAYLOAD) {
@@ -13,6 +14,7 @@ export const useSignup = () => {
       const {message} = await signup(payload);
       if (message) {
         alert(message);
+        setIsOkay(true);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -21,6 +23,11 @@ export const useSignup = () => {
       }
     } finally {
       setLoading(false);
+
+      if (isOkay) {
+        console.log('redirect');
+        window.location.href = '/';
+      }
     }
   }
   return {error, loading, postSignup};
