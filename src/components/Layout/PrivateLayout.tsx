@@ -13,6 +13,7 @@ export default function PrivateLayout() {
   useEffect(() => {
     if (token && !isAuthenticated) {
       refreshUser();
+      console.log('refreshing user');
     }
   }, [refreshUser, isAuthenticated, token]);
 

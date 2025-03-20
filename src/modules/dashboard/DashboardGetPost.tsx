@@ -36,14 +36,6 @@ export default function DashboardGetPost() {
   const toggleDeleteModal = () => setIsDeleteOpen(!isDeleteOpen);
   const [postId, setPostId] = useState('');
 
-  if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
@@ -113,50 +105,63 @@ export default function DashboardGetPost() {
 
       {error && <p>Oops. There must be an error. Try again.</p>}
 
-      <div className="container-fluid row row-cols-1 row-cols-md-3 g-2">
-        {loading && <p>Loading...</p>}
-        {posts.map((post, index) => (
-          <div
-            className="col d-flex flex-column justify-content-between p-3 border rounded"
-            key={index}
-          >
-            <div>
-              <p className="mb-0 fw-bold text-break">{post.title}</p>
-              <p className="mb-0 fst-italic text-muted">
-                {transformDate(post.updatedAt)}
-              </p>
+      {loading ? (
+        <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
+          <Spinner color="dark" />
+        </div>
+      ) : posts.length > 0 ? (
+        <div className="container-fluid row row-cols-1 row-cols-md-3 g-2">
+          {posts.map((post, index) => (
+            <div
+              className="col d-flex flex-column justify-content-between p-3 border rounded"
+              key={index}
+            >
+              <div>
+                <p className="mb-0 fw-bold text-break">{post.title}</p>
+                <p className="mb-0 fst-italic text-muted">
+                  {transformDate(post.updatedAt)}
+                </p>
 
-              <p className="text-muted text-break">{post.message}</p>
+                <p className="text-muted text-break">{post.message}</p>
+              </div>
+
+              <div className="d-flex gap-2">
+                <Button
+                  outline
+                  color="dark"
+                  size="sm"
+                  onClick={() => {
+                    setPostId(post.postId);
+                    toggleEditModal();
+                  }}
+                >
+                  Edit
+                </Button>
+
+                <Button
+                  outline
+                  color="dark"
+                  size="sm"
+                  onClick={() => {
+                    setPostId(post.postId);
+                    setFormData({title: post.title, message: post.message});
+                    toggleDeleteModal();
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
             </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center mt-3">No posts available.</p>
+      )}
 
-            <div className="d-flex gap-2">
-              <Button
-                outline
-                color="dark"
-                size="sm"
-                onClick={() => {
-                  setPostId(post.postId);
-                  toggleEditModal();
-                }}
-              >
-                Edit
-              </Button>
-
-              <Button
-                outline
-                color="dark"
-                size="sm"
-                onClick={() => {
-                  setPostId(post.postId);
-                  setFormData({title: post.title, message: post.message});
-                  toggleDeleteModal();
-                }}
-              >
-                Delete
-              </Button>
-            </div>
-          </div>
-        ))}
+      <div>
+        <p className="text-center mt-3">
+          Page {offset + 1} of {totalPage}
+        </p>
       </div>
     </section>
   );

@@ -1,13 +1,6 @@
 import {useContext} from 'react';
 import {AuthContext} from '@/context';
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Spinner,
-} from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditUser} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {USER_UPDATE, USER_DETAILS} from '@/models/user';
@@ -26,7 +19,9 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
 
   const onSubmit: SubmitHandler<USER_UPDATE> = async (data) => {
     await putEdit(data);
-    toggle();
+    if (!loading) {
+      toggle();
+    }
   };
 
   const handleClose = () => {
@@ -37,14 +32,6 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
     reset(defaultValues);
     toggle();
   };
-
-  if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -71,7 +58,7 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
             <span className="text-muted ms-2">
               {watch('firstName')
                 ? `${watch('firstName').length} / 50`
-                : '0 / 50'}
+                : `${user.firstName.length}  / 50`}
             </span>
             <input
               type="text"
@@ -97,7 +84,7 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
             <span className="text-muted ms-2">
               {watch('lastName')
                 ? `${watch('lastName').length} / 50`
-                : '0 / 50'}
+                : `${user.lastName.length} / 50`}
             </span>
             <input
               type="text"

@@ -36,7 +36,9 @@ export default function NavPrivate() {
         className="d-flex bg-white justify-content-between w-100 gap-2 py-3 border-dark-subtle border-bottom"
       >
         <Link to="/" className="text-decoration-none text-dark">
-          <h4 className="mb-0">{isAuthenticated ? `${userName}` : 'Blog'}</h4>
+          <h4 className="mb-0">
+            {isAuthenticated && userName ? `${userName}` : 'Blog'}
+          </h4>
         </Link>
 
         <Dropdown

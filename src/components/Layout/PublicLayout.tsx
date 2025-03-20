@@ -15,6 +15,7 @@ export default function PublicLayout() {
   useEffect(() => {
     if (!isAuthenticated && token) {
       refreshUser();
+      console.log('refreshing user');
     }
   }, [refreshUser, isAuthenticated, token]);
 
