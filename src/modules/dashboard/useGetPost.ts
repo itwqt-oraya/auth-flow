@@ -28,9 +28,14 @@ export const useGetPost = () => {
   }, [offset]);
 
   // uhh let's try page change
-  const handlePage = useCallback((page: number) => {
-    setOffset(page);
-  }, []);
+  const handlePage = useCallback(
+    (page: number) => {
+      if (page >= 0 && page < totalPage) {
+        setOffset(page);
+      }
+    },
+    [totalPage]
+  );
 
   useEffect(() => {
     getData();

@@ -15,12 +15,6 @@ export default function DashboardGetPost() {
   const {response, loading, error, reload, handlePage, totalPage, offset} =
     useGetPost();
 
-  const handlePageChange = (page: number) => {
-    if (page >= 0 && page < totalPage) {
-      handlePage(page);
-    }
-  };
-
   const [posts, setPosts] = useState<POST[] | []>([]);
   const [formData, setFormData] = useState<POST_PAYLOAD>({
     title: '',
@@ -100,7 +94,7 @@ export default function DashboardGetPost() {
             outline
             color="dark"
             className="mb-3"
-            onClick={() => handlePageChange(offset - 1)}
+            onClick={() => handlePage(offset - 1)}
             disabled={offset === 0}
           >
             Back
@@ -109,7 +103,7 @@ export default function DashboardGetPost() {
             outline
             color="dark"
             className="mb-3"
-            onClick={() => handlePageChange(offset + 1)}
+            onClick={() => handlePage(offset + 1)}
             disabled={offset + 1 === totalPage}
           >
             Next

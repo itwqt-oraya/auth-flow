@@ -6,7 +6,7 @@ import {LIST, Meta} from '@models/query';
 export const getPosts = (offset: number) => {
   return http<LIST<POST & Meta>>(
     'GET',
-    `/post?limit=10&offset=${offset}&orderBy=updatedAt&order=DESC`
+    `/post?limit=9&offset=${offset}&orderBy=updatedAt&order=DESC`
     // '/post?limit=10&offset=2&orderBy=updatedAt&order=DESC'
   );
 };
