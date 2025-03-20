@@ -6,14 +6,17 @@ import {POST} from '@models/posts';
 
 export const useGetPost = () => {
   const [response, setResponse] = useState<POST[] | []>([]);
+  const [offset, setOffset] = useState(0);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const getData = useCallback(async () => {
     setLoading(true);
     try {
-      const {data} = await getPosts();
-      setResponse(data);
+      const res = await getPosts(offset);
+      setResponse(res.data);
+      setTotalPage(res.meta.totalPages);
     } catch (error) {
       if (error instanceof AxiosError) {
         const {message} = error;
@@ -22,6 +25,11 @@ export const useGetPost = () => {
     } finally {
       setLoading(false);
     }
+  }, [offset]);
+
+  // uhh let's try page change
+  const handlePage = useCallback((page: number) => {
+    setOffset(page);
   }, []);
 
   useEffect(() => {
@@ -33,5 +41,9 @@ export const useGetPost = () => {
     loading,
     error,
     reload: getData,
+    handlePage,
+    setOffset,
+    totalPage,
+    offset,
   };
 };

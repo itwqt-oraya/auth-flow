@@ -5,7 +5,7 @@ export type LIST<T> = {
 
 export type Meta = {
   totalPages: number;
-  totalRows: number;
+  totalRows?: number;
   limit: number;
   offset: number;
   order: string;

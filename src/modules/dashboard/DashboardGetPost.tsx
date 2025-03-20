@@ -12,7 +12,14 @@ import {
 } from '@modules/dashboard';
 
 export default function DashboardGetPost() {
-  const {response, loading, error, reload} = useGetPost();
+  const {response, loading, error, reload, handlePage, totalPage, offset} =
+    useGetPost();
+
+  const handlePageChange = (page: number) => {
+    if (page >= 0 && page < totalPage) {
+      handlePage(page);
+    }
+  };
 
   const [posts, setPosts] = useState<POST[] | []>([]);
   const [formData, setFormData] = useState<POST_PAYLOAD>({
@@ -78,9 +85,36 @@ export default function DashboardGetPost() {
           <h6 className="mb-0 fw-semibold">Posts</h6>
           <p className="text-muted">Your posts are displayed here.</p>
         </div>
-        <Button outline color="dark" className="mb-3" onClick={toggleAddModal}>
-          Create Post
-        </Button>
+
+        <div className="d-flex gap-2">
+          <Button
+            outline
+            color="dark"
+            className="mb-3"
+            onClick={toggleAddModal}
+          >
+            Create Post
+          </Button>
+
+          <Button
+            outline
+            color="dark"
+            className="mb-3"
+            onClick={() => handlePageChange(offset - 1)}
+            disabled={offset === 0}
+          >
+            Back
+          </Button>
+          <Button
+            outline
+            color="dark"
+            className="mb-3"
+            onClick={() => handlePageChange(offset + 1)}
+            disabled={offset + 1 === totalPage}
+          >
+            Next
+          </Button>
+        </div>
       </div>
 
       {error && <p>Oops. There must be an error. Try again.</p>}
