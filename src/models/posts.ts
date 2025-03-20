@@ -11,6 +11,11 @@ export type POST_PAYLOAD = Pick<POST, 'title' | 'message'>;
 
 export type POSTS = POST[] | [];
 
+// crud response only returns mesage
+export type MSG_RESPONSE = {
+  message: string;
+};
+
 // CRUD Interface
 export interface ADD_POST {
   isOpen?: boolean;
