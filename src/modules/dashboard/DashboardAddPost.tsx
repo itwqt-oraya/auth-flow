@@ -1,15 +1,9 @@
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Spinner,
-} from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 import {useAddPost} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {POST_PAYLOAD, ADD_POST} from '@/models/posts';
+import {SpinLoader} from '@/components/Loader';
 
 export default function DashboardAddPost({isOpen, toggle, reload}: ADD_POST) {
   const {loading, error, post} = useAddPost();
@@ -28,11 +22,7 @@ export default function DashboardAddPost({isOpen, toggle, reload}: ADD_POST) {
   };
 
   if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
+    return <SpinLoader />;
   }
 
   if (error) {
@@ -88,8 +78,7 @@ export default function DashboardAddPost({isOpen, toggle, reload}: ADD_POST) {
                 ? `${watch('message').length} / 255`
                 : '0 / 255'}
             </span>
-            <input
-              type="text"
+            <textarea
               className="form-control mb-2"
               id="message"
               maxLength={255}

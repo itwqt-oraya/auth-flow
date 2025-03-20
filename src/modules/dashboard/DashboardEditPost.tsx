@@ -1,11 +1,4 @@
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Spinner,
-} from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditPost} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {POST_PAYLOAD, EDIT_POST} from '@/models/posts';
@@ -17,7 +10,7 @@ export default function DashboardEditPost({
   id,
   reload,
 }: EDIT_POST) {
-  const {put, loading, error, response, fetchPost} = useEditPost();
+  const {put, error, response, fetchPost} = useEditPost();
 
   useEffect(() => {
     if (isOpen && id) {
@@ -51,14 +44,6 @@ export default function DashboardEditPost({
       reload();
     }
   };
-
-  if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -114,8 +99,7 @@ export default function DashboardEditPost({
                 ? `${watch('message').length} / 255`
                 : '0 / 255'}
             </span>
-            <input
-              type="text"
+            <textarea
               className="form-control mb-2"
               id="message"
               maxLength={255}

@@ -1,14 +1,8 @@
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Spinner,
-} from 'reactstrap';
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useChangePassword} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {USER_PASSWORD, CHANGE_PASSWORD} from '@/models/user';
+import {SpinLoader} from '@/components/Loader';
 
 export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
   const {loading, error, changePassword} = useChangePassword();
@@ -42,11 +36,7 @@ export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
   };
 
   if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
+    return <SpinLoader />;
   }
 
   if (error) {

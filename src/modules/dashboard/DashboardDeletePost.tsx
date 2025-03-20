@@ -6,11 +6,11 @@ import {
   ModalFooter,
   Form,
   FormGroup,
-  Spinner,
 } from 'reactstrap';
 import {useDeletePost} from '@modules/dashboard/';
 import {CiWarning} from 'react-icons/ci';
 import {DELETE_POST} from '@/models/posts';
+import {SpinLoader} from '@/components/Loader';
 
 export default function DashboardDeletePost({
   isOpen,
@@ -30,11 +30,7 @@ export default function DashboardDeletePost({
   };
 
   if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
+    return <SpinLoader />;
   }
 
   if (error) {

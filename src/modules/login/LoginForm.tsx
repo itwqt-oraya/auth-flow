@@ -1,7 +1,8 @@
-import {Button, Spinner} from 'reactstrap';
+import {Button} from 'reactstrap';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {useLogin} from '@modules/login';
 import {LOGIN_PAYLOAD} from '@/models/user';
+import {SpinLoader} from '@/components/Loader';
 
 export default function LoginForm() {
   const {error, loading, postLogin} = useLogin();
@@ -24,11 +25,7 @@ export default function LoginForm() {
   };
 
   if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
+    return <SpinLoader />;
   }
 
   return (

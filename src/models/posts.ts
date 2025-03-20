@@ -37,3 +37,12 @@ export interface EDIT_POST {
   id: string;
   reload: () => void;
 }
+
+// for dashboard posts component
+export interface GET_POST {
+  posts: POST[];
+  toggleEditModal: () => void;
+  toggleDeleteModal: () => void;
+  setPostId: (id: string) => void;
+  setFormData: (data: POST_PAYLOAD) => void;
+}

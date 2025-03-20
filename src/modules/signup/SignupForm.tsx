@@ -1,7 +1,8 @@
-import {Button, Spinner} from 'reactstrap';
+import {Button} from 'reactstrap';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {useSignup} from '@modules/signup';
 import {SIGNUP_PAYLOAD} from '@/models/user';
+import {SpinLoader} from '@/components/Loader';
 
 export default function SignupForm() {
   const {error, loading, postSignup} = useSignup();
@@ -26,11 +27,7 @@ export default function SignupForm() {
   };
 
   if (loading) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <Spinner color="dark" />
-      </div>
-    );
+    return <SpinLoader />;
   }
 
   return (
