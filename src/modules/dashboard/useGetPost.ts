@@ -7,6 +7,7 @@ import {POST} from '@models/posts';
 export const useGetPost = () => {
   const [response, setResponse] = useState<POST[] | []>([]);
   const [offset, setOffset] = useState(0);
+  const [order, setOrder] = useState('DESC');
   const [totalPage, setTotalPage] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -14,7 +15,7 @@ export const useGetPost = () => {
   const getData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getPosts(offset);
+      const res = await getPosts(offset, order);
       setResponse(res.data);
       setTotalPage(res.meta.totalPages);
     } catch (error) {
@@ -25,7 +26,7 @@ export const useGetPost = () => {
     } finally {
       setLoading(false);
     }
-  }, [offset]);
+  }, [offset, order]);
 
   // uhh let's try page change
   const handlePage = useCallback(
@@ -37,6 +38,11 @@ export const useGetPost = () => {
     [totalPage]
   );
 
+  // ok now sort/order asc or desc
+  const handleOrder = useCallback((order: string) => {
+    setOrder(order);
+  }, []);
+
   useEffect(() => {
     getData();
   }, [getData]);
@@ -47,6 +53,7 @@ export const useGetPost = () => {
     error,
     reload: getData,
     handlePage,
+    handleOrder,
     setOffset,
     totalPage,
     offset,

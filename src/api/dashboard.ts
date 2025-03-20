@@ -3,10 +3,10 @@ import {POST, POST_PAYLOAD, MSG_RESPONSE} from '@models/posts';
 import {LIST, Meta} from '@models/query';
 
 // GET /post list of post
-export const getPosts = (offset: number) => {
+export const getPosts = (offset: number, order: string = 'DESC') => {
   return http<LIST<POST & Meta>>(
     'GET',
-    `/post?limit=9&offset=${offset}&orderBy=updatedAt&order=DESC`
+    `/post?limit=9&offset=${offset}&orderBy=updatedAt&order=${order}`
     // '/post?limit=10&offset=2&orderBy=updatedAt&order=DESC'
   );
 };

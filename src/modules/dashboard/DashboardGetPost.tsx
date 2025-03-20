@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {transformDate} from '@utils/date';
-import {Button, Spinner} from 'reactstrap';
+import {Button, Input, Spinner} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
 import {POST, POST_PAYLOAD} from '@/models/posts';
 
@@ -12,8 +12,16 @@ import {
 } from '@modules/dashboard';
 
 export default function DashboardGetPost() {
-  const {response, loading, error, reload, handlePage, totalPage, offset} =
-    useGetPost();
+  const {
+    response,
+    loading,
+    error,
+    reload,
+    handlePage,
+    handleOrder,
+    totalPage,
+    offset,
+  } = useGetPost();
 
   const [posts, setPosts] = useState<POST[] | []>([]);
   const [formData, setFormData] = useState<POST_PAYLOAD>({
@@ -101,6 +109,18 @@ export default function DashboardGetPost() {
             Next
           </Button>
         </div>
+      </div>
+
+      <div>
+        <Input
+          bsSize="sm"
+          className="mb-3"
+          type="select"
+          onChange={(e) => handleOrder(e.target.value)}
+        >
+          <option value="DESC">Newest</option>
+          <option value="ASC">Oldest</option>
+        </Input>
       </div>
 
       {error && <p>Oops. There must be an error. Try again.</p>}

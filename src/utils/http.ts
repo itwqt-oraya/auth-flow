@@ -1,5 +1,6 @@
 import axios, {AxiosError} from 'axios';
 import {getCookie} from '@utils/cookie';
+const token = getCookie('token');
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -11,7 +12,6 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
-  const token = getCookie('token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
 
   return config;
@@ -30,6 +30,10 @@ instance.interceptors.response.use(
     console.log('message', message);
     console.log('code', code);
 
+    if (status === 403 && !token) {
+      window.location.href = '/';
+    }
+
     return Promise.reject(error);
   }
 );
@@ -44,6 +48,7 @@ export const http = async <T = Record<string, unknown>>(
     url: url,
     data: data,
   });
+  console.log('response');
 
   return dataResponse;
 };
