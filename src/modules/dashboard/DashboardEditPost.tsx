@@ -9,14 +9,9 @@ export default function DashboardEditPost({
   toggle,
   id,
   reload,
+  POST_PAYLOAD,
 }: EDIT_POST) {
-  const {put, error, response, fetchPost} = useEditPost();
-
-  useEffect(() => {
-    if (isOpen && id) {
-      fetchPost(id);
-    }
-  }, [isOpen, id, fetchPost]);
+  const {put, error} = useEditPost();
 
   const {
     register,
@@ -25,17 +20,12 @@ export default function DashboardEditPost({
     watch,
     formState: {errors},
   } = useForm<POST_PAYLOAD>({
-    defaultValues: {
-      title: '',
-      message: '',
-    },
+    defaultValues: POST_PAYLOAD,
   });
 
   useEffect(() => {
-    if (response) {
-      reset(response);
-    }
-  }, [response, reset]);
+    reset(POST_PAYLOAD);
+  }, [POST_PAYLOAD, reset]);
 
   const onSubmit: SubmitHandler<POST_PAYLOAD> = async (data) => {
     await put(data, id);
@@ -108,7 +98,7 @@ export default function DashboardEditPost({
                 minLength: 1,
                 maxLength: 255,
               })}
-            />
+            ></textarea>
             {errors.message && (
               <span className="text-danger fst-italic">
                 This field is required.

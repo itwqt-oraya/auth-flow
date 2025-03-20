@@ -36,6 +36,7 @@ export interface EDIT_POST {
   toggle: () => void;
   id: string;
   reload: () => void;
+  POST_PAYLOAD: POST_PAYLOAD;
 }
 
 // for dashboard posts component

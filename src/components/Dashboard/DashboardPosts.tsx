@@ -32,6 +32,7 @@ export default function DashboardPosts({
                 size="sm"
                 onClick={() => {
                   setPostId(post.postId);
+                  setFormData({title: post.title, message: post.message});
                   toggleEditModal();
                 }}
               >
