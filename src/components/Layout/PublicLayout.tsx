@@ -8,16 +8,17 @@ import {AuthContext} from '@/context';
 
 export default function PublicLayout() {
   const {isAuthenticated} = useContext(AuthContext);
+  const isAuth = getCookie('isAuthenticated');
   const token = getCookie('token');
 
   const {refreshUser} = useRefresh();
 
   useEffect(() => {
-    if (!isAuthenticated && token) {
+    if (!isAuth && token) {
       refreshUser();
       console.log('refreshing user');
     }
-  }, [refreshUser, isAuthenticated, token]);
+  }, [refreshUser, isAuth, token]);
 
   return (
     <>

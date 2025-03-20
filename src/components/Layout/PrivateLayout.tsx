@@ -8,14 +8,15 @@ import {AuthContext} from '@/context';
 export default function PrivateLayout() {
   const {isAuthenticated} = useContext(AuthContext);
   const token = getCookie('token');
+  const isAuth = getCookie('isAuthenticated');
   const {refreshUser} = useRefresh();
 
   useEffect(() => {
-    if (token && !isAuthenticated) {
+    if (token && !isAuth) {
       refreshUser();
       console.log('refreshing user');
     }
-  }, [refreshUser, isAuthenticated, token]);
+  }, [refreshUser, isAuth, token]);
 
   return (
     <>
