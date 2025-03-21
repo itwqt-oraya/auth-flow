@@ -15,6 +15,7 @@ export const useGetPostById = () => {
     setLoading(true);
     try {
       const res = await getPost(id);
+      setLoading(false);
       if (res) {
         setResponse(res);
       }
@@ -23,8 +24,6 @@ export const useGetPostById = () => {
         const {message} = error;
         setError(message);
       }
-    } finally {
-      setLoading(false);
     }
   };
 

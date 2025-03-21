@@ -10,6 +10,7 @@ export const useChangePassword = () => {
     setLoading(true);
     try {
       const {data, status} = await password(payload);
+      setLoading(false);
       if (data && status === 200) {
         alert('Password changed succesfully');
       } else {
@@ -17,8 +18,6 @@ export const useChangePassword = () => {
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : String(error));
-    } finally {
-      setLoading(false);
     }
   }
   return {

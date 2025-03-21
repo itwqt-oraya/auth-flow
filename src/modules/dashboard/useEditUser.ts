@@ -13,17 +13,17 @@ export const useEditUser = () => {
     setLoading(true);
     try {
       const {data} = await details(payload);
+      setLoading(false);
+
       if (data) {
         loginUser({data: data});
+        setSuccess(true);
         alert('User updated successfully');
       } else {
         alert('Error updating user data');
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : String(error));
-    } finally {
-      setLoading(false);
-      setSuccess(true);
     }
   }
   return {loading, error, putEdit, success};

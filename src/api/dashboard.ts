@@ -3,6 +3,7 @@ import {POST, POST_PAYLOAD, MSG_RESPONSE} from '@models/posts';
 import {LIST, Meta} from '@models/query';
 
 // GET /post list of post
+// query react router
 export const getPosts = (offset: number, order: string = 'DESC') => {
   return http<LIST<POST & Meta>>(
     'GET',

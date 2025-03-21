@@ -16,6 +16,8 @@ export const useGetPost = () => {
     setLoading(true);
     try {
       const res = await getPosts(offset, order);
+      setLoading(false);
+
       setResponse(res.data);
       setTotalPage(res.meta.totalPages);
     } catch (error) {
@@ -23,8 +25,6 @@ export const useGetPost = () => {
         const {message} = error;
         setError(message);
       }
-    } finally {
-      setLoading(false);
     }
   }, [offset, order]);
 

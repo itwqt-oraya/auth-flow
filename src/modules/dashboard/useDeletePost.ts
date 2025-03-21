@@ -9,13 +9,12 @@ export const useDeletePost = () => {
     setLoading(true);
     try {
       const res = await deletePost(id);
+      setLoading(false);
       if (res) {
         alert(res.message);
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : String(error));
-    } finally {
-      setLoading(false);
     }
   }, []);
 
