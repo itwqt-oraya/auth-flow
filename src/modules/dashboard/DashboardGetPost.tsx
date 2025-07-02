@@ -1,10 +1,9 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {Button} from 'reactstrap';
 import {useGetPost} from '@modules/dashboard/';
-import {POST} from '@/models/posts';
 import {DashboardOrder, DashboardPosts} from '@/components/Dashboard';
-import {SpinLoader} from '@/components/Loader';
-// Modals
+import {SpinLoader, ErrorLoader} from '@/components/Loader';
+
 import {
   DashboardAddPost,
   DashboardEditPost,
@@ -17,20 +16,13 @@ export default function DashboardGetPost() {
     loading,
     error,
     reload,
-    handlePage,
-    handleOrder,
+    handleQuery,
     totalPage,
+    order,
     offset,
   } = useGetPost();
 
-  const [posts, setPosts] = useState<POST[] | []>([]);
   const [formData, setFormData] = useState({title: '', message: ''});
-
-  useEffect(() => {
-    if (response && !loading && !error) {
-      setPosts(response);
-    }
-  }, [response, loading, error]);
 
   // Modal State
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -41,16 +33,8 @@ export default function DashboardGetPost() {
   const toggleDeleteModal = () => setIsDeleteOpen(!isDeleteOpen);
   const [postId, setPostId] = useState('');
 
-  const handleChangeOrder = (order: string) => {
-    handleOrder(order);
-  };
-
   if (error) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <h5 className="text-danger">{error}</h5>
-      </div>
-    );
+    return <ErrorLoader error={error} />;
   }
 
   return (
@@ -60,7 +44,6 @@ export default function DashboardGetPost() {
         toggle={toggleAddModal}
         reload={reload}
       />
-
       <DashboardEditPost
         isOpen={isEditOpen}
         toggle={toggleEditModal}
@@ -82,47 +65,20 @@ export default function DashboardGetPost() {
           <p className="text-muted">Your posts are displayed here.</p>
         </div>
 
-        <div className="d-flex gap-2">
-          <Button
-            outline
-            color="dark"
-            className="mb-3"
-            onClick={toggleAddModal}
-          >
-            Create Post
-          </Button>
-
-          <Button
-            outline
-            color="dark"
-            className="mb-3"
-            onClick={() => handlePage(offset - 1)}
-            disabled={offset === 0}
-          >
-            Back
-          </Button>
-          <Button
-            outline
-            color="dark"
-            className="mb-3"
-            onClick={() => handlePage(offset + 1)}
-            disabled={offset + 1 === totalPage}
-          >
-            Next
-          </Button>
-        </div>
+        <Button outline color="dark" className="mb-3" onClick={toggleAddModal}>
+          Create Post
+        </Button>
       </div>
 
-      {/* on reload get posts again */}
-      <DashboardOrder changeOrder={handleChangeOrder} />
+      <DashboardOrder onChangeQuery={handleQuery} />
 
       {error && <p>Oops. There must be an error. Try again.</p>}
 
       {loading ? (
         <SpinLoader />
-      ) : posts.length > 0 ? (
+      ) : response.length > 0 ? (
         <DashboardPosts
-          posts={posts}
+          posts={response}
           toggleEditModal={toggleEditModal}
           toggleDeleteModal={toggleDeleteModal}
           setPostId={setPostId}
@@ -132,10 +88,26 @@ export default function DashboardGetPost() {
         <p className="text-center mt-3">No posts available.</p>
       )}
 
-      <div>
-        <p className="text-center mt-3">
+      <div className="d-flex gap-2 align-items-center justify-content-center my-3">
+        <Button
+          outline
+          color="dark"
+          onClick={() => handleQuery(offset - 1, order)}
+          disabled={offset === 0}
+        >
+          Back
+        </Button>
+        <p className="text-center mb-0">
           Page {offset + 1} of {totalPage}
         </p>
+        <Button
+          outline
+          color="dark"
+          onClick={() => handleQuery(offset + 1, order)}
+          disabled={offset + 1 === totalPage}
+        >
+          Next
+        </Button>
       </div>
     </section>
   );

@@ -1,22 +1,20 @@
-import {useCallback, useState} from 'react';
+import {useState} from 'react';
 import {deletePost} from '@api/dashboard';
 
 export const useDeletePost = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const deleteApi = useCallback(async (id: string) => {
+  const deleteApi = async (id: string) => {
     setLoading(true);
     try {
-      const res = await deletePost(id);
-      setLoading(false);
-      if (res) {
-        alert(res.message);
-      }
+      await deletePost(id);
     } catch (error) {
       setError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
 
   return {loading, error, deleteApi};
 };

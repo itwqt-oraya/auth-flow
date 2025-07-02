@@ -1,6 +1,7 @@
 import {Button} from 'reactstrap';
 import {transformDate} from '@/utils/date';
 import {GET_POST} from '@/models/posts';
+
 export default function DashboardPosts({
   posts,
   toggleEditModal,
@@ -8,6 +9,11 @@ export default function DashboardPosts({
   setPostId,
   setFormData,
 }: GET_POST) {
+  const handlePost = (post: GET_POST['posts'][number]) => {
+    setPostId(post.postId);
+    setFormData({title: post.title, message: post.message});
+  };
+
   return (
     <>
       <div className="container-fluid row row-cols-1 row-cols-md-3 g-2">
@@ -31,8 +37,7 @@ export default function DashboardPosts({
                 color="dark"
                 size="sm"
                 onClick={() => {
-                  setPostId(post.postId);
-                  setFormData({title: post.title, message: post.message});
+                  handlePost(post);
                   toggleEditModal();
                 }}
               >
@@ -44,8 +49,7 @@ export default function DashboardPosts({
                 color="dark"
                 size="sm"
                 onClick={() => {
-                  setPostId(post.postId);
-                  setFormData({title: post.title, message: post.message});
+                  handlePost(post);
                   toggleDeleteModal();
                 }}
               >

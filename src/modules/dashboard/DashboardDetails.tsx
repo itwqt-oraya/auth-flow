@@ -4,6 +4,7 @@ import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {useEditUser} from '@modules/dashboard/';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import {USER_UPDATE, USER_DETAILS} from '@/models/user';
+import {ErrorLoader} from '@/components/Loader';
 
 export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
   const {user} = useContext(AuthContext);
@@ -19,26 +20,17 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
 
   const onSubmit: SubmitHandler<USER_UPDATE> = async (data) => {
     await putEdit(data);
-    if (!loading) {
-      toggle();
-    }
+    toggle();
+    reset();
   };
 
   const handleClose = () => {
-    const defaultValues = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
-    reset(defaultValues);
+    reset();
     toggle();
   };
 
   if (error) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <h5 className="text-danger">{error}</h5>
-      </div>
-    );
+    return <ErrorLoader error={error} />;
   }
 
   return (
@@ -50,7 +42,7 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
         </div>
       </ModalHeader>
       <ModalBody>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <div className="mb-3">
             <label htmlFor="firstName" className="form-label fw-semibold mb-1">
               First Name <span className="text-danger">*</span>
@@ -102,16 +94,21 @@ export default function DashboardDetails({isOpen, toggle}: USER_DETAILS) {
               <span className="text-danger">This field is required</span>
             )}
           </div>
-          <ModalFooter>
-            <Button color="dark" type="submit">
-              Submit
-            </Button>
-            <Button outline color="dark" onClick={handleClose}>
-              Cancel
-            </Button>
-          </ModalFooter>
         </form>
       </ModalBody>
+      <ModalFooter>
+        <Button
+          color="dark"
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+          disabled={loading}
+        >
+          Submit
+        </Button>
+        <Button outline color="dark" onClick={handleClose} disabled={loading}>
+          Cancel
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 }

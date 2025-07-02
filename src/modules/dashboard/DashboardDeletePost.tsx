@@ -10,7 +10,7 @@ import {
 import {useDeletePost} from '@modules/dashboard/';
 import {CiWarning} from 'react-icons/ci';
 import {DELETE_POST} from '@/models/posts';
-import {SpinLoader} from '@/components/Loader';
+import {SpinLoader, ErrorLoader} from '@/components/Loader';
 
 export default function DashboardDeletePost({
   isOpen,
@@ -21,24 +21,14 @@ export default function DashboardDeletePost({
 }: DELETE_POST) {
   const {error, loading, deleteApi} = useDeletePost();
 
-  const handleSubmit = () => {
-    deleteApi(id);
-    if (!error) {
-      toggle();
-      reload();
-    }
+  const handleSubmit = async () => {
+    await deleteApi(id);
+    toggle();
+    reload();
   };
 
-  if (loading) {
-    return <SpinLoader />;
-  }
-
   if (error) {
-    return (
-      <div className="container w-100 h-100 d-flex justify-content-center align-items-center">
-        <h5 className="text-danger">{error}</h5>
-      </div>
-    );
+    return <ErrorLoader error={error} />;
   }
   return (
     <Modal isOpen={isOpen} centered>
@@ -50,25 +40,34 @@ export default function DashboardDeletePost({
           </p>
         </div>
       </ModalHeader>
-      <ModalBody>
-        <Form>
-          <FormGroup>
-            <CiWarning className="text-danger w-100 fs-1 text-center mb-2" />
+      {loading ? (
+        <SpinLoader />
+      ) : (
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <CiWarning className="text-danger w-100 fs-1 text-center mb-2" />
 
-            <h6 className="text-center text-semibold mb-0">
-              {POST_PAYLOAD.title}
-            </h6>
-            <p className="text-muted text-center fst-italic">
-              {POST_PAYLOAD.message || 'This post does not have a message.'}
-            </p>
-          </FormGroup>
-        </Form>
-      </ModalBody>
+              <h6 className="text-center text-semibold mb-0">
+                {POST_PAYLOAD.title}
+              </h6>
+              <p className="text-muted text-center fst-italic">
+                {POST_PAYLOAD.message || 'This post does not have a message.'}
+              </p>
+            </FormGroup>
+          </Form>
+        </ModalBody>
+      )}
       <ModalFooter>
-        <Button color="dark" type="submit" onClick={handleSubmit}>
+        <Button
+          color="dark"
+          type="submit"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
           Delete
         </Button>
-        <Button color="dark" outline onClick={toggle}>
+        <Button color="dark" outline onClick={toggle} disabled={loading}>
           Cancel
         </Button>
       </ModalFooter>

@@ -1,2 +1,3 @@
 import SpinLoader from './SpinLoader';
-export {SpinLoader};
+import ErrorLoader from './ErrorLoader';
+export {SpinLoader, ErrorLoader};

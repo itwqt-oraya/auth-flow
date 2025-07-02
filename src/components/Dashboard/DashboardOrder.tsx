@@ -1,8 +1,8 @@
 import {Input} from 'reactstrap';
 export default function DashboardOrder({
-  changeOrder,
+  onChangeQuery,
 }: {
-  changeOrder: (order: string) => void;
+  onChangeQuery: (offset: number, order: string) => void;
 }) {
   return (
     <div>
@@ -11,7 +11,7 @@ export default function DashboardOrder({
         className="mb-3"
         type="select"
         onChange={(e) => {
-          changeOrder(e.target.value);
+          onChangeQuery(0, e.target.value);
         }}
       >
         <option value="DESC">Newest</option>

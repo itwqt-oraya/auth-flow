@@ -9,13 +9,11 @@ export const useAddPost = () => {
   const post = async (data: POST_PAYLOAD) => {
     setLoading(true);
     try {
-      const res = await createPost(data);
-      setLoading(false);
-      if (res) {
-        alert(res.message);
-      }
+      await createPost(data);
     } catch (error) {
       setError(error instanceof Error ? error.message : String(error));
+    } finally {
+      setLoading(false);
     }
   };
 

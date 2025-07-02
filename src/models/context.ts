@@ -1,4 +1,4 @@
-import {USER, USER_RESPONSE} from '@/models/user';
+import {USER} from '@/models/user';
 
 // auth context
 export interface AUTH_CONTEXT {
@@ -6,7 +6,5 @@ export interface AUTH_CONTEXT {
   setUser: (
     user: Pick<USER, 'firstName' | 'lastName' | 'email' | 'userId'>
   ) => void;
-  loginUser: (res: USER_RESPONSE) => void;
   logoutUser: () => void;
-  isAuthenticated: boolean;
 }

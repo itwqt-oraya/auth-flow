@@ -25,8 +25,9 @@ export const useSignup = () => {
       setLoading(false);
 
       if (isOkay) {
-        console.log('redirect');
-        window.location.href = '/';
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
       }
     }
   }

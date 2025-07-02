@@ -23,6 +23,7 @@ export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
   const onSubmit: SubmitHandler<USER_PASSWORD> = async (data) => {
     await changePassword(data);
     toggle();
+    reset();
   };
 
   const handleClose = () => {
@@ -34,10 +35,6 @@ export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
     reset(defaultValues);
     toggle();
   };
-
-  if (loading) {
-    return <SpinLoader />;
-  }
 
   if (error) {
     return (
@@ -118,10 +115,15 @@ export default function DashboardPassword({isOpen, toggle}: CHANGE_PASSWORD) {
               )}
           </div>
           <ModalFooter>
-            <Button color="dark" type="submit">
+            <Button color="dark" type="submit" disabled={loading}>
               Submit
             </Button>
-            <Button color="dark" outline onClick={handleClose}>
+            <Button
+              color="dark"
+              outline
+              onClick={handleClose}
+              disabled={loading}
+            >
               Cancel
             </Button>
           </ModalFooter>

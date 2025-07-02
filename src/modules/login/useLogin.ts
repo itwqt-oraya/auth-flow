@@ -1,12 +1,11 @@
-import {useState, useContext} from 'react';
-import {AuthContext} from '@/context';
+import {useState} from 'react';
 import {login} from '@api/auth';
-import {USER, LOGIN_PAYLOAD} from '@/models/user';
+import {LOGIN_PAYLOAD} from '@/models/user';
 import {AxiosError} from 'axios';
 
+import {setCookie} from '@/utils/cookie';
+
 export const useLogin = () => {
-  const {loginUser} = useContext(AuthContext);
-  const [response, setResponse] = useState<USER | []>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -15,8 +14,10 @@ export const useLogin = () => {
     try {
       const {data} = await login(payload);
       if (data) {
-        setResponse(data);
-        loginUser({data: data});
+        // set cookie
+        setCookie('token', data.token, 1);
+        // set user in cookie
+        setCookie('user', JSON.stringify(data), 1);
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -28,5 +29,5 @@ export const useLogin = () => {
     }
   }
 
-  return {response, loading, error, postLogin};
+  return {loading, error, postLogin};
 };

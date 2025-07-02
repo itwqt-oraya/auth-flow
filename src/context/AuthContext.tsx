@@ -1,10 +1,19 @@
-import {useState, ReactNode} from 'react';
-import {setCookie, deleteCookie} from '@utils/cookie';
-import {USER_RESPONSE} from '@/models/user';
-import {AuthContext} from '@/context';
+import {useState, useEffect, ReactNode, createContext} from 'react';
+import {deleteCookie, getCookie} from '@utils/cookie';
+import {AUTH_CONTEXT} from '@/models/context';
+
+export const AuthContext = createContext<AUTH_CONTEXT>({
+  user: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    userId: '',
+  },
+  setUser: () => {},
+  logoutUser: () => {},
+});
 
 export function AuthProvider({children}: {children: ReactNode}) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
@@ -12,21 +21,19 @@ export function AuthProvider({children}: {children: ReactNode}) {
     userId: '',
   });
 
-  // login -> set token in cookie
-  const loginUser = (res: USER_RESPONSE) => {
-    setUser({
-      firstName: res.data.firstName,
-      lastName: res.data.lastName,
-      email: res.data.email,
-      userId: res.data.userId,
-    });
-    setCookie('isAuthenticated', 'true', 1);
-    setCookie('token', res.data.token, 1);
+  useEffect(() => {
+    const userCookie = getCookie('user');
+    if (userCookie) {
+      const userData = JSON.parse(userCookie);
+      setUser({
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        userId: userData.userId,
+      });
+    }
+  }, []);
 
-    setIsAuthenticated(true);
-  };
-
-  // logout -> remove token from cookie
   const logoutUser = () => {
     setUser({
       firstName: '',
@@ -34,9 +41,8 @@ export function AuthProvider({children}: {children: ReactNode}) {
       email: '',
       userId: '',
     });
+
     deleteCookie('token');
-    deleteCookie('isAuthenticated');
-    setIsAuthenticated(false);
     window.location.href = '/';
   };
 
@@ -45,9 +51,7 @@ export function AuthProvider({children}: {children: ReactNode}) {
       value={{
         user,
         setUser,
-        loginUser,
         logoutUser,
-        isAuthenticated,
       }}
     >
       {children}
