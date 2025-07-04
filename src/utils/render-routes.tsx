@@ -2,6 +2,12 @@ import {Suspense} from 'react';
 import {BrowserRouter, Routes, Route} from 'react-router';
 import {WebRouteProps, RouteProps, ChildRouteProps} from '@/models/routes';
 
+// Fallback Route
+import NotFound from '@/pages/status-code/';
+
+// Loader Component
+import {PageLoader} from '@/components/Loader';
+
 export default function renderRoutes(webRoutes: WebRouteProps) {
   return (
     <BrowserRouter>
@@ -11,7 +17,7 @@ export default function renderRoutes(webRoutes: WebRouteProps) {
             key={route.path}
             path={route.path}
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<PageLoader />}>
                 {route.layout && <route.layout>{route.element}</route.layout>}
               </Suspense>
             }
@@ -23,7 +29,7 @@ export default function renderRoutes(webRoutes: WebRouteProps) {
                   key={`${child.path}-${index}`}
                   path={child.path}
                   element={
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<PageLoader />}>
                       {child.element}
                     </Suspense>
                   }
@@ -31,6 +37,9 @@ export default function renderRoutes(webRoutes: WebRouteProps) {
               ))}
           </Route>
         ))}
+
+        {/* Fallback route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
